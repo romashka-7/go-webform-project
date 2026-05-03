@@ -1,4 +1,7 @@
-1.05
+///////////////////////////////////////////////////////////////////////
+----------------first commit (router and form)----------------
+///////////////////////////////////////////////////////////////////////
+
 Запустил сервер в main.go с помощью созданного роутера
 сервер слушает входящие запросы на порту 8080
 
@@ -47,3 +50,99 @@
     name=Валентин&email=test@mail.com
 
     После чего backend может получить эти значения из объекта Request.
+
+
+ВАЖНО:
+функции handlers написаны с большой буквы, например HomeHandler, FormHandler.
+Это нужно потому что они находятся в другом package и router должен иметь к ним доступ.
+
+///////////////////////////////////////////////////////////////////////
+----------------second commit(validation, json and api)----------------
+///////////////////////////////////////////////////////////////////////
+
+***создал domain/application.go***
+
+domain - это слой, где хранятся основные сущности проекта
+Пока создал структуру Application:
+    - Name
+    - Email
+
+Раньше данные были отдельными переменными:
+    name
+    email
+
+Теперь данные собираются в один объект application
+
+***создал validation/application_validator.go***
+
+validation отвечает только за проверку данных.
+ValidateApplication принимает application и возвращает error, eсли данные не соответствуют требованиям, иначе nil (ошибок нет)
+
+
+в formHandler теперь логика такая:
+1. проверяем что запрос POST
+2. собираем данные из формы в domain.Application
+3. передаем application в validation
+4. если ошибка возвращаем 400 Bad Request
+5. если все нормально возвращаем успешный ответ
+
+
+***новый API endpoint:***
+POST /api/applications
+
+теперь бэкенд принимает json и возвращает json
+
+В application_api_handler.go:
+- проверяем метод POST
+- читаем JSON из r.Body
+- Decode заполняет структуру Application
+- валидируем данные
+- отправляем JSON ответ
+
+
+***Важно!***
+json.NewDecoder(r.Body).Decode(&application)
+
+r.Body - тело HTTP-запроса.
+В нем лежит JSON, который отправил frontend
+
+Decode берет JSON и заполняет структуру application
+
+&application передается потому что Decode должен изменить сам объект application!
+
+***создал domain/api_response.go***
+
+APIResponse - это структура ответа API
+
+Поля:
+- Status
+- Message
+
+У полей есть json tags:
+json:"status"
+json:"message"
+
+Это нужно чтобы в JSON ответе поля были маленькими буквами:
+
+{
+  "status": "success",
+  "message": "Заявка успешно принята"
+}
+
+***подключил script.js***
+
+script.js перехватывает отправку формы
+
+event.preventDefault() отменяет стандартную отправку формы браузером
+
+fetch отправляет запрос вручную на /api/applications
+
+fetch отправляет данные в формате JSON:
+- method: POST
+- Content-Type: application/json
+- body: JSON.stringify(formData)
+
+async и await нужны потому что HTTP-запрос выполняется не мгновенно
+await ждет ответ от сервера, но не ломает работу браузера
+
+response.json() читает JSON ответ от backend
