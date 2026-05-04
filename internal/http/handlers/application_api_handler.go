@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"webform-go/internal/domain"
+	"webform-go/internal/repository"
+	"webform-go/internal/service"
 	"webform-go/internal/validation.go"
 )
 
@@ -19,7 +21,7 @@ func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&application)
 
 	if err != nil {
-		http.Error (w, "Невалидный JSON", http.StatusBadRequest)
+		http.Error(w, "Невалидный JSON", http.StatusBadRequest)
 		return
 	}
 
@@ -30,9 +32,19 @@ func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := domain.ApiResponse{
-		Status: "success",
-		Message: "Заявка успешно принята",
+	repo := repository.NewMemoryApplicationRepository()
+
+	svc := service.NewApplicationService(repo)
+
+	createdApp, err := svc.Create(application)
+
+	if err != nil {
+		http.Error(w, "Error of Server", http.StatusInternalServerError)
+		return
+	}
+	response := domain.APIResponse{
+		Status:  "success",
+		Message: "Заявка успешно принята: " + createdApp.Name,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

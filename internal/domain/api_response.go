@@ -1,6 +1,6 @@
 package domain
 
-type ApiResponse struct {
+type APIResponse struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
 }
