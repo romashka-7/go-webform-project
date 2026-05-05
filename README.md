@@ -222,7 +222,7 @@ ApplicationService содержит внутри repo
 pipeline теперь такой:
 
 handler
-↓
+↓ 
 validation
 ↓
 service
