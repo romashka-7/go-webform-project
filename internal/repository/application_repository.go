@@ -4,4 +4,6 @@ import "webform-go/internal/domain"
 
 type ApplicationRepository interface {
 	Save(application domain.Application) (domain.Application, error)
+
+	GetAll() ([]domain.Application, error)
 }

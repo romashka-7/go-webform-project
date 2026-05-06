@@ -18,3 +18,7 @@ func NewApplicationService(repo repository.ApplicationRepository) *ApplicationSe
 func (s *ApplicationService) Create(application domain.Application) (domain.Application, error) {
 	return s.repo.Save(application)
 }
+
+func (s *ApplicationService) GetAll() ([]domain.Application, error) {
+	return s.repo.GetAll()
+}

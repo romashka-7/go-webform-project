@@ -9,6 +9,12 @@ import (
 	"webform-go/internal/validation.go"
 )
 
+var applicationRepo repository.ApplicationRepository
+
+func SetApplicationRepository(repo repository.ApplicationRepository) {
+	applicationRepo = repo
+}
+
 func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodPost {
@@ -32,9 +38,7 @@ func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	repo := repository.NewMemoryApplicationRepository()
-
-	svc := service.NewApplicationService(repo)
+	svc := service.NewApplicationService(applicationRepo)
 
 	createdApp, err := svc.Create(application)
 

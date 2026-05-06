@@ -1,7 +1,3 @@
-///////////////////////////////////////////////////////////////////////
-----------------first commit (router and form)----------------
-///////////////////////////////////////////////////////////////////////
-
 # First commit (router and form)
 
 Запустил сервер в main.go с помощью созданного роутера
@@ -58,9 +54,7 @@
 функции handlers написаны с большой буквы, например HomeHandler, FormHandler.
 Это нужно потому что они находятся в другом package и router должен иметь к ним доступ.
 
-///////////////////////////////////////////////////////////////////////
-----------------second commit(validation, json and api)----------------
-///////////////////////////////////////////////////////////////////////
+#Second commit(validation, json and api)
 
 ***создал domain/application.go***
 
@@ -149,9 +143,9 @@ await ждет ответ от сервера, но не ломает работ
 
 response.json() читает JSON ответ от backend
 
-/////////////////////////////////////////////////////////
------------------------third commit---------------------
-////////////////////////////////////////////////////////
+
+#Third commit(temporary database(sql), service for work with data)
+
 
 ***создал application_service***
 
@@ -230,3 +224,198 @@ service
 repository
 ↓
 данные сохраняются
+
+
+
+
+#Fourth commit(migrations, config server, sql injection, handler get and general handler)
+
+***подготовил структуру базы данных***
+
+создал migrations/001_create_applications.sql
+
+в нем описана таблица applications
+
+таблица содержит:
+    -id - уникальный номер заявки
+    -name - имя пользователя
+    -email - email пользователя
+    -created_at - дата создания заявки
+
+***изменил domain.Application***
+
+добавил поле ID
+
+ID нужен потому что после сохранения заявки в базе данных
+у каждой заявки должен быть свой уникальный номер
+
+
+***создал config layer***
+
+создан .env файл для хранения настроек проекта:
+    - SERVER_PORT
+    - DB_USER
+    - DB_PASSWORD
+    - DB_HOST
+    - DB_PORT
+    - DB_NAME
+
+ВАЖНО:
+настройки вынесены отдельно от кода
+
+---
+
+***создал config.go***
+
+config отвечает за загрузку настроек проекта
+
+LoadConfig:
+    - загружает .env через godotenv.Load()
+    - собирает настройки в структуру Config
+    - возвращает готовый объект Config
+
+создана функция getEnv:
+    - получает переменные окружения через os.Getenv()
+    - если переменной нет, возвращает значение по умолчанию
+
+---
+
+***изменил main.go***
+
+main.go теперь:
+    - загружает config
+    - получает порт сервера из .env
+    - запускает сервер через cfg.ServerPort
+
+---
+
+***создал app.NewDB***
+
+NewDB отвечает за подключение к MySQL
+
+внутри:
+    - собирается DSN строка подключения
+    - sql.Open создает connection pool
+    - db.Ping проверяет доступность БД
+
+ВАЖНО:
+database/sql работает через mysql driver
+
+используется side-effect import:
+
+_ "github.com/go-sql-driver/mysql"
+
+driver регистрируется внутри database/sql
+и после этого становится доступен sql.Open("mysql", ...)
+
+---
+
+***создал mysql_application_repository***
+
+repository теперь работает с реальной MySQL базой данных
+
+структура MySQLApplicationRepository содержит:
+    - db *sql.DB
+
+метод Save:
+    - выполняет INSERT INTO applications
+    - сохраняет name и email
+    - получает LastInsertId()
+    - записывает ID обратно в application
+
+ВАЖНО:
+repository теперь сохраняет данные не в массив, а в MySQL
+
+---
+
+***изменил architecture flow***
+
+раньше:
+handler -> service -> memory repository
+
+теперь:
+handler -> service -> mysql repository -> MySQL
+
+---
+
+***добавил dependency injection***
+
+repository создается в main.go
+и передается в handlers через SetApplicationRepository
+
+handler больше не создает repository самостоятельно
+
+main.go теперь собирает приложение:
+    - config
+    - db
+    - repository
+    - handlers
+
+
+***добавил получение заявок из базы данных***
+
+добавил метод GetAll в repository interface
+
+теперь repository умеет:
+    - Save — сохранять заявку
+    - GetAll — получать список всех заявок
+
+***изменил mysql_application_repository***
+
+добавил метод GetAll
+
+он выполняет SQL запрос:
+
+    SELECT id, name, email
+    FROM applications
+    ORDER BY id DESC
+
+Query используется для SELECT запросов
+
+rows.Next() проходит по строкам результата
+
+rows.Scan() переносит данные из строки БД в структуру Application
+
+append добавляет каждую заявку в общий массив applications
+
+ВАЖНО:
+Exec используется для INSERT / UPDATE / DELETE
+Query используется для SELECT
+
+---
+
+***изменил service***
+
+добавил метод GetAll
+
+service вызывает repository.GetAll()
+
+---
+
+***добавил GetApplicationsHandler***
+
+handler обрабатывает GET запрос и возвращает список заявок в JSON
+
+ответ имеет вид:
+
+{
+  "status": "success",
+  "data": [...]
+}
+
+---
+
+***добавил общий ApplicationsHandler***
+
+теперь один endpoint /api/applications работает по разным HTTP методам:
+
+GET /api/applications
+    получить список заявок
+
+POST /api/applications
+    создать новую заявку
+
+ВАЖНО:
+один URL может выполнять разные действия в зависимости от HTTP метода
+
+
