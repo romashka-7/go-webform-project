@@ -40,7 +40,7 @@ func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 
 	svc := service.NewApplicationService(applicationRepo)
 
-	createdApp, err := svc.Create(application)
+	createdApp, login, password, err := svc.Create(application)
 
 	if err != nil {
 		http.Error(w, "Error of Server", http.StatusInternalServerError)
@@ -49,8 +49,11 @@ func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 	response := domain.APIResponse{
 		Status:  "success",
 		Message: "Заявка успешно принята: " + createdApp.Name,
+		Data: map[string]string{
+			"login":    login,
+			"password": password,
+		},
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(response)

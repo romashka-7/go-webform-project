@@ -130,3 +130,40 @@ func (r *MySQLApplicationRepository) Delete(id int) error {
 
 	return nil
 }
+
+func (r *MySQLApplicationRepository) CreateUser(applicationID int, login string, passwordHash string) error {
+	query := `
+		INSERT INTO users (application_id, login, password_hash)
+		VALUES (?, ?, ?)
+	`
+
+	_, err := r.db.Exec(query, applicationID, login, passwordHash)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *MySQLApplicationRepository) GetUserByLogin(login string) (domain.User, error) {
+	query := `
+		SELECT id, application_id, login, password_hash
+		FROM users
+		WHERE login = ?
+	`
+
+	var user domain.User
+
+	err := r.db.QueryRow(query, login).Scan(
+		&user.ID,
+		&user.ApplicationID,
+		&user.Login,
+		&user.PasswordHash,
+	)
+
+	if err != nil {
+		return domain.User{}, err
+	}
+
+	return user, nil
+}

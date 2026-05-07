@@ -10,4 +10,7 @@ type ApplicationRepository interface {
 	Update(id int, application domain.Application) (domain.Application, error)
 
 	Delete(id int) error
+
+	CreateUser(applicationID int, login string, passwordHash string) error
+	GetUserByLogin(login string) (domain.User, error)
 }

@@ -541,3 +541,114 @@ Delete — DELETE
 !!ВАЖНО!!
 Exec используется для INSERT / UPDATE / DELETE
 Query используется для SELECT
+
+
+# Sixth commit(auth base, users and generated credentials)
+
+***начал делать авторизацию пользователя***
+
+создал таблицу users
+
+таблица содержит:
+    - id — уникальный номер пользователя
+    - application_id — связь пользователя с заявкой
+    - login — логин пользователя
+    - password_hash — хеш пароля
+    - created_at — дата создания пользователя
+
+ВАЖНО:
+пароль в базу данных не сохраняется в открытом виде
+в базу сохраняется только password_hash
+
+---
+
+***создал domain.User***
+
+User — это сущность пользователя
+
+она содержит:
+    - ID
+    - ApplicationID
+    - Login
+    - PasswordHash
+
+---
+
+***создал security/password.go***
+
+security отвечает за работу с логином и паролем
+
+добавил функции:
+    - GenerateLogin()
+    - GeneratePassword()
+    - HashPassword()
+    - CheckPassword()
+
+GenerateLogin создает логин автоматически
+
+GeneratePassword создает случайный пароль
+
+HashPassword превращает пароль в хеш
+
+CheckPassword сравнивает введенный пароль с хешем из базы данных
+
+---
+
+***изменил создание заявки***
+
+теперь при создании заявки backend делает не только INSERT в applications
+
+теперь flow такой:
+
+POST /api/applications
+↓
+handler
+↓
+validation
+↓
+service.Create()
+↓
+repository.Save()
+↓
+создание login и password
+↓
+HashPassword(password)
+↓
+repository.CreateUser()
+↓
+MySQL
+
+---
+
+***добавил CreateUser в repository***
+
+repository теперь умеет создавать пользователя для заявки
+
+SQL запрос:
+
+    INSERT INTO users (application_id, login, password_hash)
+    VALUES (?, ?, ?)
+
+---
+
+***изменил APIResponse***
+
+добавил поле Data
+
+теперь API может возвращать не только status и message,
+но и дополнительные данные
+
+например после создания заявки backend возвращает:
+
+{
+  "status": "success",
+  "message": "Заявка успешно принята",
+  "data": {
+    "login": "...",
+    "password": "..."
+  }
+}
+
+ВАЖНО:
+обычный пароль показывается пользователю один раз
+в базе хранится только хеш пароля
