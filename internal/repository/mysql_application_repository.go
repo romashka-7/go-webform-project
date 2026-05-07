@@ -60,7 +60,7 @@ func (r *MySQLApplicationRepository) GetAll() ([]domain.Application, error) {
 
 	defer rows.Close()
 
-	var applications []domain.Application
+	applications := []domain.Application{}
 
 	for rows.Next() {
 
@@ -80,4 +80,53 @@ func (r *MySQLApplicationRepository) GetAll() ([]domain.Application, error) {
 	}
 
 	return applications, nil
+}
+
+func (r *MySQLApplicationRepository) Update(id int, application domain.Application) (domain.Application, error) {
+	query := `
+		UPDATE applications
+		SET name = ?, email = ?
+		WHERE id = ?
+	`
+
+	result, err := r.db.Exec(query, application.Name, application.Email, id)
+	if err != nil {
+		return domain.Application{}, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return domain.Application{}, err
+	}
+
+	if rowsAffected == 0 {
+		return domain.Application{}, sql.ErrNoRows
+	}
+
+	application.ID = id
+
+	return application, nil
+}
+
+func (r *MySQLApplicationRepository) Delete(id int) error {
+	query := `
+		DELETE FROM applications
+		WHERE id = ?
+	`
+
+	result, err := r.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
 }

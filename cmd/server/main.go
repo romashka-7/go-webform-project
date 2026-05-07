@@ -16,14 +16,14 @@ func main() {
 
 	db, err := app.NewBD(cfg)
 
-	repo := repository.NewMySQLApplicationRepository(db)
-
-	handlers.SetApplicationRepository(repo)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
+
+	repo := repository.NewMySQLApplicationRepository(db)
+
+	handlers.SetApplicationRepository(repo)
 
 	router := apphttp.NewRouter()
 

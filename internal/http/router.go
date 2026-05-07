@@ -17,9 +17,8 @@ func NewRouter() http.Handler {
 	mux.HandleFunc("/health", handlers.HealthHandler)
 	mux.HandleFunc("/form", handlers.FormHandler)
 
-	mux.HandleFunc("/api/applications", handlers.ApplicationAPIHandler)
-	mux.HandleFunc("/api/applications", handlers.GetApplicationsHandler)
-
+	mux.HandleFunc("/api/applications", handlers.ApplicationsHandler)
+	mux.HandleFunc("/api/applications/", handlers.ApplicationsHandler)
 	return mux
 
 }

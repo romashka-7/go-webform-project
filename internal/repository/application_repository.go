@@ -6,4 +6,8 @@ type ApplicationRepository interface {
 	Save(application domain.Application) (domain.Application, error)
 
 	GetAll() ([]domain.Application, error)
+
+	Update(id int, application domain.Application) (domain.Application, error)
+
+	Delete(id int) error
 }

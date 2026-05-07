@@ -13,6 +13,12 @@ func ApplicationsHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		GetApplicationsHandler(w, r)
 
+	case http.MethodPut:
+		UpdateApplicationHandler(w, r)
+
+	case http.MethodDelete:
+		DeleteApplicationHandler(w, r)
+
 	default:
 		http.Error(w, "Метод не разрешён", http.StatusMethodNotAllowed)
 	}

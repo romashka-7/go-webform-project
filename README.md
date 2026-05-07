@@ -54,7 +54,7 @@
 функции handlers написаны с большой буквы, например HomeHandler, FormHandler.
 Это нужно потому что они находятся в другом package и router должен иметь к ним доступ.
 
-#Second commit(validation, json and api)
+# Second commit(validation, json and api)
 
 ***создал domain/application.go***
 
@@ -144,7 +144,7 @@ await ждет ответ от сервера, но не ломает работ
 response.json() читает JSON ответ от backend
 
 
-#Third commit(temporary database(sql), service for work with data)
+# Third commit(temporary database(sql), service for work with data)
 
 
 ***создал application_service***
@@ -228,7 +228,26 @@ repository
 
 
 
-#Fourth commit(migrations, config server, sql injection, handler get and general handler)
+# Fourth commit(migrations, config server, sql injection, handler get and general handler)
+
+
+feat(database): add MySQL storage and application listing
+
+Add database migration for applications table and extend Application model
+with ID field.
+
+Add config layer for loading server and database settings from environment.
+
+Create MySQL connection setup and MySQLApplicationRepository for saving
+applications into the database.
+
+Replace memory repository flow with MySQL repository and inject repository
+from main.go into handlers.
+
+Add GetAll repository and service methods, GET applications handler and
+general ApplicationsHandler to support both GET and POST on /api/applications.
+
+
 
 ***подготовил структуру базы данных***
 
@@ -419,3 +438,106 @@ POST /api/applications
 один URL может выполнять разные действия в зависимости от HTTP метода
 
 
+
+# Fifth commit(put and delete, full crud api)
+
+***добавил обновление заявки***
+
+добавил метод Update в repository interface
+
+теперь repository умеет:
+    - Save — создать заявку
+    - GetAll — получить все заявки
+    - Update — изменить заявку по ID
+
+---
+
+***изменил mysql_application_repository***
+
+добавил метод Update
+
+он выполняет SQL запрос:
+
+    UPDATE applications
+    SET name = ?, email = ?
+    WHERE id = ?
+
+ВАЖНО:
+PUT используется для изменения уже существующей записи
+
+адрес теперь может быть динамическим:
+
+    PUT /api/applications/1
+
+это значит:
+    изменить заявку с ID = 1
+
+---
+
+***добавил UpdateApplicationHandler***
+
+handler:
+    - достает ID из URL
+    - проверяет что ID корректный
+    - читает JSON из r.Body
+    - валидирует данные
+    - вызывает service.Update()
+    - возвращает JSON ответ
+
+---
+
+***добавил удаление заявки***
+
+добавил метод Delete в repository interface
+
+добавил метод Delete в service
+
+добавил метод Delete в mysql_application_repository
+
+SQL запрос:
+
+    DELETE FROM applications
+    WHERE id = ?
+
+---
+
+***добавил DeleteApplicationHandler***
+
+handler:
+    - достает ID из URL
+    - проверяет ID
+    - вызывает service.Delete()
+    - возвращает JSON ответ
+
+---
+
+***изменил ApplicationsHandler***
+
+теперь один endpoint поддерживает четыре метода:
+
+GET /api/applications
+    получить список заявок
+
+POST /api/applications
+    создать заявку
+
+PUT /api/applications/{id}
+    изменить заявку по ID
+
+DELETE /api/applications/{id}
+    удалить заявку по ID
+
+---
+
+***итог***
+
+теперь API умеет полный CRUD:
+
+Create — POST
+Read — GET
+Update — PUT
+Delete — DELETE
+
+!!ВАЖНО!!
+Exec используется для INSERT / UPDATE / DELETE
+Query используется для SELECT

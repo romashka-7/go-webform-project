@@ -22,3 +22,11 @@ func (s *ApplicationService) Create(application domain.Application) (domain.Appl
 func (s *ApplicationService) GetAll() ([]domain.Application, error) {
 	return s.repo.GetAll()
 }
+
+func (s *ApplicationService) Update(id int, application domain.Application) (domain.Application, error) {
+	return s.repo.Update(id, application)
+}
+
+func (s *ApplicationService) Delete(id int) error {
+	return s.repo.Delete(id)
+}
