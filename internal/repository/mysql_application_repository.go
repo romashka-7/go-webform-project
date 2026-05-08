@@ -205,3 +205,17 @@ func (r *MySQLApplicationRepository) GetUserBySessionID(sessionID string) (domai
 
 	return user, nil
 }
+
+func (r *MySQLApplicationRepository) DeleteSession(sessionID string) error {
+	query := `
+		DELETE FROM sessions
+		WHERE session_id = ?
+	`
+
+	_, err := r.db.Exec(query, sessionID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -7,12 +7,14 @@ import (
 )
 
 type Config struct {
-	ServerPort string
-	DBUser     string
-	DBPassword string
-	DBHost     string
-	DBPort     string
-	DBName     string
+	ServerPort    string
+	DBUser        string
+	DBPassword    string
+	DBHost        string
+	DBPort        string
+	DBName        string
+	AdminLogin    string
+	AdminPassword string
 }
 
 func LoadConfig() Config {
@@ -21,11 +23,13 @@ func LoadConfig() Config {
 	return Config{
 		ServerPort: getEnv("SERVER_PORT", "8080"),
 
-		DBUser:     getEnv("DB_USER", "root"),
-		DBPassword: getEnv("DB_PASSWORD", ""),
-		DBHost:     getEnv("DB_HOST", "localhost"),
-		DBPort:     getEnv("DB_PORT", "3306"),
-		DBName:     getEnv("DB_NAME", "webform"),
+		DBUser:        getEnv("DB_USER", "root"),
+		DBPassword:    getEnv("DB_PASSWORD", ""),
+		DBHost:        getEnv("DB_HOST", "localhost"),
+		DBPort:        getEnv("DB_PORT", "3306"),
+		DBName:        getEnv("DB_NAME", "webform"),
+		AdminLogin:    getEnv("ADMIN_LOGIN", "admin"),
+		AdminPassword: getEnv("ADMIN_PASSWORD", "admin123"),
 	}
 }
 

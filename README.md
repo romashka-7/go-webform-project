@@ -768,3 +768,166 @@ curl -b cookies.txt отправляет cookie обратно на сервер
     - создавать session
     - выдавать cookie
 
+
+# Eighth commit(authentication, sessions, cookies and protected routes)
+
+***добавил полноценную авторизацию пользователя***
+
+backend теперь умеет:
+    - создавать login/password
+    - проверять login/password
+    - создавать session
+    - выдавать cookie
+    - определять авторизованного пользователя
+
+---
+
+***добавил login flow***
+
+создан endpoint:
+
+POST /api/login
+
+login handler:
+    - читает JSON из r.Body
+    - получает login и password
+    - вызывает service.Login()
+    - проверяет password_hash
+    - создает session
+    - выдает session cookie
+
+---
+
+***добавил sessions table***
+
+создана таблица sessions
+
+таблица содержит:
+    - id
+    - user_id
+    - session_id
+    - created_at
+
+session_id связывает браузер пользователя и backend
+
+---
+
+***добавил GenerateSessionID***
+
+создан security/session.go
+
+GenerateSessionID создает случайный длинный session_id
+
+backend сохраняет session_id в базе данных
+и отправляет его пользователю через cookie
+
+---
+
+***добавил cookie авторизацию***
+
+после успешного login backend отправляет:
+
+    Set-Cookie: session_id=...
+
+браузер автоматически сохраняет cookie
+и потом автоматически отправляет ее обратно backend
+
+---
+
+***добавил endpoint /api/me***
+
+GET /api/me
+
+endpoint:
+    - читает cookie session_id
+    - ищет session в базе данных
+    - получает пользователя
+    - возвращает информацию об авторизованном пользователе
+
+---
+
+***добавил logout***
+
+создан endpoint:
+
+POST /api/logout
+
+logout:
+    - удаляет session из базы данных
+    - очищает cookie пользователя
+
+после logout backend возвращает:
+
+    401 Unauthorized
+
+при попытке доступа к защищенным endpoint
+
+---
+
+***добавил protected routes***
+
+теперь пользователь может:
+    - изменять только свою заявку
+    - удалять только свою заявку
+
+flow защиты:
+
+cookie session_id
+↓
+получение user по session_id
+↓
+сравнение user.ApplicationID и ID из URL
+↓
+если совпадает:
+    разрешить действие
+иначе:
+    403 Forbidden
+
+---
+
+***добавил admin basic auth***
+
+создан admin endpoint:
+
+GET /admin/applications
+
+используется HTTP Basic Authentication
+
+admin login/password хранятся в .env
+
+без авторизации backend возвращает:
+
+    401 Unauthorized
+
+---
+
+***что изучил***
+
+401 Unauthorized:
+    пользователь не авторизован
+
+403 Forbidden:
+    пользователь авторизован,
+    но пытается получить доступ к чужим данным
+
+curl -i:
+    показывает HTTP headers и body
+
+curl -c:
+    сохраняет cookie в файл
+
+curl -b:
+    отправляет cookie обратно серверу
+
+---
+
+***итог***
+
+backend теперь поддерживает:
+
+    - authentication
+    - sessions
+    - cookies
+    - protected routes
+    - admin authorization
+    - access control

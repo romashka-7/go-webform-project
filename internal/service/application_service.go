@@ -70,3 +70,7 @@ func (s *ApplicationService) Login(login string, password string) (domain.User, 
 func (s *ApplicationService) GetUserBySessionID(sessionID string) (domain.User, error) {
 	return s.repo.GetUserBySessionID(sessionID)
 }
+
+func (s *ApplicationService) Logout(sessionID string) error {
+	return s.repo.DeleteSession(sessionID)
+}

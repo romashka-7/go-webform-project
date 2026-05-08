@@ -5,13 +5,16 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
 	"webform-go/internal/domain"
 	"webform-go/internal/service"
 )
 
-func DeleteApplicationHandler(w http.ResponseWriter, r *http.Request) {
-	idStr := strings.TrimPrefix(r.URL.Path, "/api/applications/")
+func AdminDeleteApplication(w http.ResponseWriter, r *http.Request) {
+	if !CheckAdminAuth(w, r) {
+		return
+	}
+
+	idStr := strings.TrimPrefix(r.URL.Path, "/admin/applications/")
 
 	id, err := strconv.Atoi(idStr)
 	if err != nil || id <= 0 {
@@ -19,24 +22,7 @@ func DeleteApplicationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie, err := r.Cookie("session_id")
-	if err != nil {
-		http.Error(w, "Пользователь не авторизован", http.StatusUnauthorized)
-		return
-	}
-
 	svc := service.NewApplicationService(applicationRepo)
-
-	user, err := svc.GetUserBySessionID(cookie.Value)
-	if err != nil {
-		http.Error(w, "Сессия не найдена", http.StatusUnauthorized)
-		return
-	}
-
-	if user.ApplicationID != id {
-		http.Error(w, "Нельзя удалить чужую заявку", http.StatusForbidden)
-		return
-	}
 
 	err = svc.Delete(id)
 	if err != nil {
@@ -51,4 +37,5 @@ func DeleteApplicationHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+
 }
