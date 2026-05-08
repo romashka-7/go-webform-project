@@ -9,6 +9,7 @@ import (
 	apphttp "webform-go/internal/http"
 	"webform-go/internal/http/handlers"
 	"webform-go/internal/repository"
+	"webform-go/internal/service"
 )
 
 func main() {
@@ -22,10 +23,11 @@ func main() {
 	defer db.Close()
 
 	repo := repository.NewMySQLApplicationRepository(db)
+	applicationService := service.NewApplicationService(repo)
 
 	handlers.SetApplicationRepository(repo)
 
-	router := apphttp.NewRouter()
+	router := apphttp.NewRouter(applicationService)
 
 	addr := ":" + cfg.ServerPort
 

@@ -990,7 +990,7 @@ application_languages
 
 ***добавил Languages в domain.Application***
 
-теперь структура Application содержит:
+теперь структура Application содержит:  
 
 ```
 Languages []int
@@ -1124,4 +1124,203 @@ backend теперь поддерживает:
 - GROUP BY statistics
 - обновление языков
 - normalized database structure
+```
+# Tenth commit(middleware, request pipeline and auth separation)
+
+***начал выносить авторизацию в middleware***
+
+раньше handlers самостоятельно:
+- читали cookie
+- проверяли session
+- искали пользователя
+- проверяли доступ
+
+теперь эта логика начинает выноситься в middleware слой
+
+---
+
+***создал middleware layer***
+
+создана папка:
+
+```
+internal/http/middleware
+```
+
+middleware — промежуточный слой между request и handler
+
+pipeline теперь выглядит так:
+
+request
+↓
+router
+↓
+middleware
+↓
+handler
+↓
+service
+↓
+repository
+↓
+MySQL
+
+---
+
+***добавил AdminAuth middleware***
+
+создан:
+
+```
+admin_middleware.go
+```
+
+middleware:
+- читает BasicAuth
+- проверяет ADMIN_LOGIN
+- проверяет ADMIN_PASSWORD
+- возвращает 401 Unauthorized если данные неверные
+- вызывает next handler если авторизация успешна
+
+ВАЖНО:
+middleware теперь сам решает,
+можно ли передавать request дальше
+
+---
+
+***добавил Auth middleware***
+
+создан:
+
+```
+auth_middleware.go
+```
+
+middleware:
+- читает cookie session_id
+- ищет session в базе данных
+- получает пользователя
+- добавляет пользователя в request context
+
+если session невалидна:
+backend возвращает 401 Unauthorized
+
+---
+
+***добавил RequireOwner middleware***
+
+RequireOwner:
+- получает пользователя из context
+- получает application ID из URL
+- сравнивает:
+
+```
+    user.ApplicationID == applicationID
+```
+
+если пользователь пытается изменить чужую заявку:
+
+```
+backend возвращает 403 Forbidden
+```
+
+---
+
+***что такое middleware***
+
+middleware — это промежуточный обработчик request
+
+раньше flow был такой:
+
+handler
+↓
+auth checks
+↓
+business logic
+
+теперь:
+
+middleware
+↓
+auth checks
+↓
+handler
+↓
+business logic
+
+---
+
+***добавил request context***
+
+middleware сохраняет пользователя в context:
+
+```
+context.WithValue(...)
+```
+
+handler теперь может получать уже авторизованного пользователя
+без повторной проверки session
+
+---
+
+***изменил router***
+
+router теперь собирает request pipeline:
+
+middleware.Auth(
+middleware.RequireOwner(
+handler
+)
+)
+
+ВАЖНО:
+middleware может оборачивать другие middleware и handlers
+
+---
+
+***изменил main.go***
+
+main.go теперь:
+- создает repository
+- создает service
+- передает service в router
+
+это нужно потому что middleware использует:
+
+```
+applicationService.GetUserBySessionID()
+```
+
+---
+
+***что изучил***
+
+middleware
+
+request pipeline
+
+request context
+
+handler chaining
+
+separation of concerns
+
+auth middleware
+
+ownership middleware
+
+---
+
+***итог***
+
+backend теперь поддерживает:
+
+```
+- middleware architecture
+- request pipeline
+- auth middleware
+- admin middleware
+- ownership middleware
+- request context
+- cleaner handlers
 ```

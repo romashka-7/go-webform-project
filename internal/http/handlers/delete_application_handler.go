@@ -19,7 +19,6 @@ func DeleteApplicationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, "Пользователь не авторизован", http.StatusUnauthorized)
 		return
@@ -27,14 +26,8 @@ func DeleteApplicationHandler(w http.ResponseWriter, r *http.Request) {
 
 	svc := service.NewApplicationService(applicationRepo)
 
-	user, err := svc.GetUserBySessionID(cookie.Value)
 	if err != nil {
 		http.Error(w, "Сессия не найдена", http.StatusUnauthorized)
-		return
-	}
-
-	if user.ApplicationID != id {
-		http.Error(w, "Нельзя удалить чужую заявку", http.StatusForbidden)
 		return
 	}
 

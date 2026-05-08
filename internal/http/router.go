@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"webform-go/internal/http/handlers"
+	"webform-go/internal/http/middleware"
+	"webform-go/internal/service"
 )
 
-func NewRouter() http.Handler {
-
+func NewRouter(applicationService *service.ApplicationService) http.Handler {
 	mux := http.NewServeMux()
 
 	fs := http.FileServer(http.Dir("web/static"))
@@ -26,10 +27,34 @@ func NewRouter() http.Handler {
 
 	mux.HandleFunc("/api/logout", handlers.LogoutHandler)
 
-	mux.HandleFunc("/admin/applications", handlers.AdminApplicationsHandler)
-	mux.HandleFunc("/admin/applications/", handlers.AdminApplicationsHandler)
+	mux.HandleFunc("/api/applications", handlers.ApplicationsHandler)
 
-	mux.HandleFunc("/admin/stats", handlers.AdminStatsHandler)
+	authMiddleware := middleware.Auth(applicationService)
+
+	mux.Handle(
+		"/api/applications/",
+		authMiddleware(
+			middleware.RequireOwner(
+				http.HandlerFunc(handlers.ApplicationsHandler),
+			),
+		),
+	)
+
+	mux.Handle(
+		"/api/applications/",
+		authMiddleware(
+			middleware.RequireOwner(
+				http.HandlerFunc(handlers.ApplicationsHandler),
+			),
+		),
+	)
+
+	mux.Handle(
+		"/admin/stats",
+		middleware.AdminAuth(
+			http.HandlerFunc(handlers.AdminStatsHandler),
+		),
+	)
 	return mux
 
 }
