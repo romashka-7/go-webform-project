@@ -931,3 +931,197 @@ backend теперь поддерживает:
     - protected routes
     - admin authorization
     - access control
+
+
+# Ninth commit(admin stats, languages relation and group by analytics)
+
+***добавил поддержку языков программирования***
+
+создана migration:
+004_create_languages.sql
+
+добавлены таблицы:
+    languages
+    application_languages
+
+---
+
+***структура базы данных стала нормализованной***
+
+раньше applications содержала только:
+- name
+- email
+
+теперь языки хранятся отдельно
+
+структура связей:
+
+applications
+↓
+application_languages
+↓
+languages
+
+---
+
+***создал many-to-many relation***
+
+одна заявка может содержать несколько языков программирования
+
+например:
+
+```
+Go
+Python
+C++
+```
+
+для этого используется таблица связей:
+
+```
+application_languages
+```
+
+она хранит:
+- application_id
+- language_id
+
+---
+
+***добавил Languages в domain.Application***
+
+теперь структура Application содержит:
+
+```
+Languages []int
+```
+
+backend теперь умеет принимать массив ID языков:
+
+{
+"languages": [1, 3, 12]
+}
+
+ВАЖНО:
+backend хранит не названия языков,
+а их ID из таблицы languages
+
+это соответствует нормальной форме базы данных
+
+---
+
+***изменил Save в mysql repository***
+
+раньше Save сохранял только:
+
+```
+name
+email
+```
+
+теперь flow такой:
+
+INSERT applications
+↓
+получение LastInsertId
+↓
+INSERT application_languages
+
+backend теперь сохраняет связи заявки с выбранными языками
+
+---
+
+***изменил Update flow***
+
+теперь при обновлении заявки backend:
+- обновляет applications
+- удаляет старые языки заявки
+- создает новые связи application_languages
+
+flow:
+
+UPDATE applications
+↓
+DELETE old application_languages
+↓
+INSERT new application_languages
+
+ВАЖНО:
+это простой и надежный KISS подход
+backend полностью пересоздает связи языков при обновлении
+
+---
+
+***добавил admin statistics***
+
+создан endpoint:
+
+```
+GET /admin/stats
+```
+
+endpoint защищен через BasicAuth
+
+backend возвращает:
+- total_applications
+- total_users
+- total_sessions
+- статистику языков
+
+---
+
+***добавил GROUP BY аналитику***
+
+repository выполняет SQL запрос:
+
+```
+SELECT l.name, COUNT(al.application_id)
+FROM languages l
+LEFT JOIN application_languages al
+    ON al.language_id = l.id
+GROUP BY l.id, l.name
+```
+
+GROUP BY используется для подсчета количества пользователей,
+выбравших каждый язык программирования
+
+---
+
+***почему используется LEFT JOIN***
+
+LEFT JOIN показывает:
+- даже языки с count = 0
+
+обычный JOIN вернул бы только языки,
+которые уже выбрали пользователи
+
+---
+
+***что изучил***
+
+many-to-many relations
+
+нормализацию базы данных
+
+GROUP BY
+
+JOIN / LEFT JOIN
+
+aggregate SQL queries
+
+analytics endpoints
+
+---
+
+***итог***
+
+backend теперь поддерживает:
+
+```
+- many-to-many relations
+- хранение языков программирования
+- admin analytics
+- GROUP BY statistics
+- обновление языков
+- normalized database structure
+```

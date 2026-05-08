@@ -28,6 +28,8 @@ func NewRouter() http.Handler {
 
 	mux.HandleFunc("/admin/applications", handlers.AdminApplicationsHandler)
 	mux.HandleFunc("/admin/applications/", handlers.AdminApplicationsHandler)
+
+	mux.HandleFunc("/admin/stats", handlers.AdminStatsHandler)
 	return mux
 
 }

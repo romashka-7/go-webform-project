@@ -15,8 +15,8 @@ type ApplicationRepository interface {
 	GetUserByLogin(login string) (domain.User, error)
 
 	CreateSession(userID int, sessionID string) error
-
 	GetUserBySessionID(sessionID string) (domain.User, error)
-
 	DeleteSession(sessionID string) error
+
+	GetAdminStats() (domain.AdminStats, error)
 }

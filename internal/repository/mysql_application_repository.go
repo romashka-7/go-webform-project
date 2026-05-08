@@ -40,6 +40,22 @@ func (r *MySQLApplicationRepository) Save(application domain.Application) (domai
 	}
 
 	application.ID = int(id)
+	for _, languageID := range application.Languages {
+		_, err := r.db.Exec(`
+		INSERT INTO application_languages (
+			application_id,
+			language_id
+		)
+		VALUES (?, ?)
+	`,
+			application.ID,
+			languageID,
+		)
+
+		if err != nil {
+			return domain.Application{}, err
+		}
+	}
 
 	return application, nil
 }
@@ -104,7 +120,32 @@ func (r *MySQLApplicationRepository) Update(id int, application domain.Applicati
 	}
 
 	application.ID = id
+	_, err = r.db.Exec(`
+	DELETE FROM application_languages
+	WHERE application_id = ?
+	`, id)
 
+	for _, languageID := range application.Languages {
+		_, err := r.db.Exec(`
+		INSERT INTO application_languages (
+			application_id,
+			language_id
+		)
+		VALUES (?, ?)
+	`,
+			id,
+			languageID,
+		)
+
+		if err != nil {
+			return domain.Application{}, err
+		}
+	}
+
+	if err != nil {
+		return domain.Application{}, err
+	}
+	application.ID = id
 	return application, nil
 }
 
@@ -218,4 +259,54 @@ func (r *MySQLApplicationRepository) DeleteSession(sessionID string) error {
 	}
 
 	return nil
+}
+
+func (r *MySQLApplicationRepository) GetAdminStats() (domain.AdminStats, error) {
+	var stats domain.AdminStats
+
+	err := r.db.QueryRow(`
+		SELECT
+			(SELECT COUNT(*) FROM applications),
+			(SELECT COUNT(*) FROM users),
+			(SELECT COUNT(*) FROM sessions)
+	`).Scan(
+		&stats.TotalApplications,
+		&stats.TotalUsers,
+		&stats.TotalSessions,
+	)
+
+	if err != nil {
+		return domain.AdminStats{}, err
+	}
+
+	rows, err := r.db.Query(`
+		SELECT l.name, COUNT(al.application_id) AS count
+		FROM languages l
+		LEFT JOIN application_languages al ON al.language_id = l.id
+		GROUP BY l.id, l.name
+		ORDER BY count DESC, l.name ASC
+	`)
+
+	if err != nil {
+		return domain.AdminStats{}, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var stat domain.LanguageStat
+
+		err := rows.Scan(&stat.Language, &stat.Count)
+		if err != nil {
+			return domain.AdminStats{}, err
+		}
+
+		stats.Languages = append(stats.Languages, stat)
+	}
+
+	if err := rows.Err(); err != nil {
+		return domain.AdminStats{}, err
+	}
+
+	return stats, nil
 }

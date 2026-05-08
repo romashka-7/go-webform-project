@@ -74,3 +74,7 @@ func (s *ApplicationService) GetUserBySessionID(sessionID string) (domain.User, 
 func (s *ApplicationService) Logout(sessionID string) error {
 	return s.repo.DeleteSession(sessionID)
 }
+
+func (s *ApplicationService) GetAdminStats() (domain.AdminStats, error) {
+	return s.repo.GetAdminStats()
+}
