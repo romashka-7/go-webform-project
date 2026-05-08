@@ -19,6 +19,10 @@ func NewRouter() http.Handler {
 
 	mux.HandleFunc("/api/applications", handlers.ApplicationsHandler)
 	mux.HandleFunc("/api/applications/", handlers.ApplicationsHandler)
+
+	mux.HandleFunc("/api/login", handlers.LoginHandler)
+
+	mux.HandleFunc("/api/me", handlers.MeHandler)
 	return mux
 
 }

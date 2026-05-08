@@ -167,3 +167,41 @@ func (r *MySQLApplicationRepository) GetUserByLogin(login string) (domain.User, 
 
 	return user, nil
 }
+
+func (r *MySQLApplicationRepository) CreateSession(userID int, sessionID string) error {
+	query := `
+		INSERT INTO sessions (user_id, session_id)
+		VALUES (?, ?)
+	`
+
+	_, err := r.db.Exec(query, userID, sessionID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *MySQLApplicationRepository) GetUserBySessionID(sessionID string) (domain.User, error) {
+	query := `
+		SELECT users.id, users.application_id, users.login, users.password_hash
+		FROM users
+		JOIN sessions ON sessions.user_id = users.id
+		WHERE sessions.session_id = ?
+	`
+
+	var user domain.User
+
+	err := r.db.QueryRow(query, sessionID).Scan(
+		&user.ID,
+		&user.ApplicationID,
+		&user.Login,
+		&user.PasswordHash,
+	)
+
+	if err != nil {
+		return domain.User{}, err
+	}
+
+	return user, nil
+}

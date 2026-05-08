@@ -47,15 +47,26 @@ func (s *ApplicationService) Delete(id int) error {
 	return s.repo.Delete(id)
 }
 
-func (s *ApplicationService) Login(login string, password string) (domain.User, error) {
+func (s *ApplicationService) Login(login string, password string) (domain.User, string, error) {
 	user, err := s.repo.GetUserByLogin(login)
 	if err != nil {
-		return domain.User{}, err
+		return domain.User{}, "", err
 	}
 
 	if !security.CheckPassword(password, user.PasswordHash) {
-		return domain.User{}, errors.New("invalid password")
+		return domain.User{}, "", errors.New("invalid password")
 	}
 
-	return user, nil
+	sessionID := security.GenerateSessionID()
+
+	err = s.repo.CreateSession(user.ID, sessionID)
+	if err != nil {
+		return domain.User{}, "", err
+	}
+
+	return user, sessionID, nil
+}
+
+func (s *ApplicationService) GetUserBySessionID(sessionID string) (domain.User, error) {
+	return s.repo.GetUserBySessionID(sessionID)
 }

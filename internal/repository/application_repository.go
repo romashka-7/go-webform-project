@@ -13,4 +13,8 @@ type ApplicationRepository interface {
 
 	CreateUser(applicationID int, login string, passwordHash string) error
 	GetUserByLogin(login string) (domain.User, error)
+
+	CreateSession(userID int, sessionID string) error
+
+	GetUserBySessionID(sessionID string) (domain.User, error)
 }
