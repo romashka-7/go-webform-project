@@ -652,3 +652,119 @@ SQL запрос:
 ВАЖНО:
 обычный пароль показывается пользователю один раз
 в базе хранится только хеш пароля
+
+
+
+# Seventh commit(auth login, sessions and cookies)
+
+***добавил login endpoint***
+
+создал endpoint:
+
+POST /api/login
+
+он принимает JSON:
+
+{
+  "login": "...",
+  "password": "..."
+}
+
+handler:
+    - читает JSON из r.Body
+    - передает login и password в service
+    - если данные верные, возвращает успешный JSON ответ
+    - если данные неверные, возвращает 401 Unauthorized
+
+---
+
+***добавил проверку пользователя по логину***
+
+добавил метод GetUserByLogin в repository interface
+
+mysql repository выполняет запрос:
+
+    SELECT id, application_id, login, password_hash
+    FROM users
+    WHERE login = ?
+
+ВАЖНО:
+QueryRow используется когда ожидается одна строка
+
+Query используется когда ожидается много строк
+
+---
+
+***добавил создание session***
+
+создал таблицу sessions
+
+таблица содержит:
+    - id
+    - user_id
+    - session_id
+    - created_at
+
+session_id — это случайный ключ, по которому backend узнает пользователя
+
+---
+
+***добавил cookie***
+
+после успешного login backend отдает cookie:
+
+    Set-Cookie: session_id=...
+
+cookie содержит session_id
+
+ВАЖНО:
+браузер сам сохраняет cookie
+и потом сам отправляет ее на backend
+
+---
+
+***добавил security/session.go***
+
+добавил функцию GenerateSessionID
+
+она создает случайный длинный session_id
+
+---
+
+***добавил endpoint /api/me***
+
+GET /api/me
+
+он должен:
+    - прочитать cookie session_id
+    - найти пользователя по session_id
+    - вернуть данные авторизованного пользователя
+
+---
+
+***что изучил***
+
+curl -i показывает не только тело ответа,
+но и HTTP headers
+
+это нужно чтобы увидеть:
+
+    Set-Cookie
+
+curl -c cookies.txt сохраняет cookie в файл
+
+curl -b cookies.txt отправляет cookie обратно на сервер
+
+---
+
+***итог***
+
+теперь backend умеет:
+
+    - создавать пользователя при отправке заявки
+    - генерировать login и password
+    - хранить password_hash в базе
+    - проверять login и password
+    - создавать session
+    - выдавать cookie
+
