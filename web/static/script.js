@@ -12,10 +12,97 @@ const state = {
   applicationId: null,
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initLoginForm();
   initApplicationForm();
+  initLogout();
+
+  await checkAuth();
 });
+
+function initLogout() {
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener('click', async () => {
+  await fetch('/api/logout', {
+    method: 'POST',
+    credentials: 'same-origin',
+  });
+
+  state.isEditMode = false;
+  state.applicationId = null;
+
+  const contactForm = document.getElementById('contactForm');
+
+  if (contactForm) {
+    contactForm.reset();
+  }
+
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (logoutBtn) {
+    logoutBtn.style.display = 'none';
+  }
+
+  const submitText = document.querySelector('#submitBtn span');
+
+  if (submitText) {
+    submitText.textContent = 'Сохранить';
+  }
+
+  showMessage(
+    'loginMessage',
+    'Вы вышли из аккаунта',
+    'success'
+  );
+
+  showMessage(
+    'formMessage',
+    '',
+    'success'
+  );
+;
+
+    location.reload();
+  });
+}
+
+async function checkAuth() {
+  try {
+    const response = await fetch('/api/me', {
+      credentials: 'same-origin',
+    });
+
+    if (!response.ok) return;
+
+    const result = await response.json();
+
+    if (!result.data) return;
+
+    state.isEditMode = true;
+    state.applicationId = result.data.application_id;
+
+    await loadApplicationForEdit(state.applicationId);
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (logoutBtn) {
+      logoutBtn.style.display = 'block';
+    }
+
+    const submitText = document.querySelector('#submitBtn span');
+
+    if (submitText) {
+      submitText.textContent = 'Обновить данные';
+    }
+
+    console.log('AUTO LOGIN SUCCESS');
+  } catch (error) {
+    console.error('AUTH CHECK ERROR:', error);
+  }
+}
 
 function $(id) {
   return document.getElementById(id);
@@ -81,6 +168,11 @@ function initLoginForm() {
         state.applicationId = applicationId;
 
         await loadApplicationForEdit(applicationId);
+
+        const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.style.display = 'block';
+}
 
         showMessage(
           'loginMessage',

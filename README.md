@@ -1489,7 +1489,7 @@ backend теперь поддерживает:
     - MySQL persistence
 
 
-# Twelve commit
+# Twelfth commit
 
 ***добавил frontend авторизацию и edit mode***
 
@@ -1552,3 +1552,101 @@ backend теперь поддерживает:
     - auto form loading
     - PUT update flow
     - full frontend/backend auth integration
+
+
+# Thirteenth commit(frontend auth persistence, logout and admin panel)
+
+***добавил frontend auth persistence***
+
+раньше после refresh страницы:
+    - frontend терял edit mode
+    - кнопка "Обновить данные" исчезала
+    - пользователь визуально "выходил" из аккаунта
+
+теперь frontend при загрузке страницы делает:
+
+    GET /api/me
+
+backend:
+    - читает session cookie
+    - получает пользователя
+    - возвращает application_id
+
+frontend:
+    - автоматически включает edit mode
+    - загружает заявку пользователя
+    - заполняет форму
+    - показывает logout button
+
+---
+
+***добавил logout flow***
+
+создан frontend logout flow:
+
+POST /api/logout
+
+logout теперь:
+    - удаляет session
+    - очищает frontend state
+    - отключает edit mode
+    - очищает форму
+    - скрывает logout button
+    - возвращает guest mode
+
+---
+
+***добавил admin panel frontend***
+
+создана отдельная admin panel:
+
+    /admin/panel
+
+admin panel:
+    - получает заявки через fetch API
+    - отображает таблицу заявок
+    - поддерживает update/delete
+    - показывает statistics
+    - использует protected admin routes
+
+---
+
+***добавил frontend edit loading***
+
+после login frontend:
+
+    получает application_id
+    ↓
+    GET /api/applications/{id}
+    ↓
+    получает заявку
+    ↓
+    автоматически заполняет форму
+
+---
+
+***улучшил admin languages editing***
+
+раньше admin panel показывала languages как:
+    1,2,3
+
+теперь используется:
+    <select multiple>
+
+admin panel теперь работает с languages relation корректно
+
+---
+
+***итог***
+
+frontend/backend теперь поддерживают:
+
+    - auth persistence
+    - auto login restore
+    - logout flow
+    - admin panel UI
+    - admin editing
+    - admin delete
+    - frontend edit mode
+    - session restore
+    - SPA-like behavior

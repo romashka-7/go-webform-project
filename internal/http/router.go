@@ -13,6 +13,7 @@ func NewRouter(applicationService *service.ApplicationService) http.Handler {
 
 	authMiddleware := middleware.Auth(applicationService)
 
+	adminAuth := middleware.AdminAuth
 	fs := http.FileServer(http.Dir("web/static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
@@ -37,10 +38,31 @@ func NewRouter(applicationService *service.ApplicationService) http.Handler {
 
 	mux.Handle(
 		"/admin/stats",
-		middleware.AdminAuth(
+		adminAuth(
 			http.HandlerFunc(handlers.AdminStatsHandler),
 		),
 	)
+	mux.Handle(
+		"/admin/panel",
+		middleware.AdminAuth(
+			http.HandlerFunc(handlers.AdminPanelHandler),
+		),
+	)
+
+	mux.Handle(
+		"/admin/applications",
+		middleware.AdminAuth(
+			http.HandlerFunc(handlers.AdminApplicationsHandler),
+		),
+	)
+
+	mux.Handle(
+		"/admin/applications/",
+		middleware.AdminAuth(
+			http.HandlerFunc(handlers.AdminApplicationsHandler),
+		),
+	)
+
 	return mux
 
 }
