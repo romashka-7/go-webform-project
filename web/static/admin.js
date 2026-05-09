@@ -1,9 +1,36 @@
 'use strict';
 
+const LANGUAGES = [
+  { id: 1, name: 'Pascal' },
+  { id: 2, name: 'C' },
+  { id: 3, name: 'C++' },
+  { id: 4, name: 'JavaScript' },
+  { id: 5, name: 'PHP' },
+  { id: 6, name: 'Python' },
+  { id: 7, name: 'Java' },
+  { id: 8, name: 'Haskell' },
+  { id: 9, name: 'Clojure' },
+  { id: 10, name: 'Prolog' },
+  { id: 11, name: 'Scala' },
+  { id: 12, name: 'Go' },
+];
+
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadApplications();
-  await loadStats();
+  document.getElementById('refreshBtn')?.addEventListener('click', loadAdminData);
+
+  await loadAdminData();
 });
+
+async function loadAdminData() {
+  try {
+    await Promise.all([
+      loadApplications(),
+      loadStats(),
+    ]);
+  } catch (error) {
+    showMessage(error.message, 'error');
+  }
+}
 
 async function requestJSON(url, options = {}) {
   const response = await fetch(url, {
@@ -21,7 +48,7 @@ async function requestJSON(url, options = {}) {
   try {
     result = JSON.parse(text);
   } catch {
-    throw new Error(text);
+    throw new Error(text || 'Сервер вернул не JSON');
   }
 
   if (!response.ok) {
@@ -35,123 +62,129 @@ async function loadApplications() {
   const result = await requestJSON('/admin/applications');
   const applications = result.data || [];
 
-  const container = document.getElementById('applicationsTable');
+  const tbody = document.getElementById('applicationsBody');
 
-  if (applications.length === 0) {
-    container.innerHTML = '<p>Заявок нет</p>';
+  if (!applications.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" class="empty-cell">Заявок пока нет</td>
+      </tr>
+    `;
     return;
   }
 
-  container.innerHTML = `
-    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse;">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>ФИО</th>
-          <th>Телефон</th>
-          <th>Email</th>
-          <th>Дата рождения</th>
-          <th>Пол</th>
-          <th>Биография</th>
-          <th>Языки</th>
-          <th>Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${applications.map(app => renderRow(app)).join('')}
-      </tbody>
-    </table>
-  `;
+  tbody.innerHTML = applications.map(renderApplicationRow).join('');
 }
 
-function renderRow(app) {
+function renderApplicationRow(app) {
   return `
     <tr id="row-${app.id}">
-      <td>${app.id}</td>
-      <td><input value="${escapeHTML(app.name || '')}" id="name-${app.id}"></td>
-      <td><input value="${escapeHTML(app.phone || '')}" id="phone-${app.id}"></td>
-      <td><input value="${escapeHTML(app.email || '')}" id="email-${app.id}"></td>
-      <td><input type="date" value="${escapeHTML(app.birth_date || '')}" id="birth-${app.id}"></td>
+      <td><span class="badge">#${app.id}</span></td>
+
+      <td>
+        <input id="name-${app.id}" value="${escapeHTML(app.name || '')}" />
+      </td>
+
+      <td>
+        <input id="phone-${app.id}" value="${escapeHTML(app.phone || '')}" />
+      </td>
+
+      <td>
+        <input id="email-${app.id}" type="email" value="${escapeHTML(app.email || '')}" />
+      </td>
+
+      <td>
+        <input id="birth-${app.id}" type="date" value="${escapeHTML(app.birth_date || '')}" />
+      </td>
+
       <td>
         <select id="gender-${app.id}">
-          <option value="male" ${app.gender === 'male' ? 'selected' : ''}>male</option>
-          <option value="female" ${app.gender === 'female' ? 'selected' : ''}>female</option>
+          <option value="male" ${app.gender === 'male' ? 'selected' : ''}>Мужской</option>
+          <option value="female" ${app.gender === 'female' ? 'selected' : ''}>Женский</option>
         </select>
       </td>
-      <td><textarea id="bio-${app.id}">${escapeHTML(app.biography || '')}</textarea></td>
+
       <td>
-        <select multiple id="languages-${app.id}">
-          ${renderLanguages(app.languages || [])}
+        <textarea id="bio-${app.id}">${escapeHTML(app.biography || '')}</textarea>
+      </td>
+
+      <td>
+        <select id="languages-${app.id}" multiple>
+          ${renderLanguageOptions(app.languages || [])}
         </select>
       </td>
+
       <td>
-        <button onclick="updateApplication(${app.id})">Сохранить</button>
-        <button onclick="deleteApplication(${app.id})">Удалить</button>
+        <div class="actions">
+          <button class="action-btn save-btn" onclick="updateApplication(${app.id})">
+            Сохранить
+          </button>
+
+          <button class="action-btn delete-btn" onclick="deleteApplication(${app.id})">
+            Удалить
+          </button>
+        </div>
       </td>
     </tr>
   `;
 }
 
-function renderLanguages(selected = []) {
-  const languages = [
-    { id: 1, name: 'Pascal' },
-    { id: 2, name: 'C' },
-    { id: 3, name: 'C++' },
-    { id: 4, name: 'JavaScript' },
-    { id: 5, name: 'PHP' },
-    { id: 6, name: 'Python' },
-    { id: 7, name: 'Java' },
-    { id: 8, name: 'Haskell' },
-    { id: 9, name: 'Clojure' },
-    { id: 10, name: 'Prolog' },
-    { id: 11, name: 'Scala' },
-    { id: 12, name: 'Go' },
-  ];
+function renderLanguageOptions(selectedLanguages) {
+  return LANGUAGES.map((language) => {
+    const selected = selectedLanguages.includes(language.id) ? 'selected' : '';
 
-  return languages.map(lang => `
-    <option
-      value="${lang.id}"
-      ${selected.includes(lang.id) ? 'selected' : ''}
-    >
-      ${lang.name}
-    </option>
-  `).join('');
+    return `
+      <option value="${language.id}" ${selected}>
+        ${language.name}
+      </option>
+    `;
+  }).join('');
 }
 
 async function updateApplication(id) {
-  const data = {
-    name: document.getElementById(`name-${id}`).value.trim(),
-    phone: document.getElementById(`phone-${id}`).value.trim(),
-    email: document.getElementById(`email-${id}`).value.trim(),
-    birth_date: document.getElementById(`birth-${id}`).value,
-    gender: document.getElementById(`gender-${id}`).value,
-    biography: document.getElementById(`bio-${id}`).value.trim(),
-    agreement: true,
-    languages: Array.from(
-  document.getElementById(`languages-${id}`).selectedOptions
-).map(option => Number(option.value)),
-  };
+  try {
+    const data = {
+      name: document.getElementById(`name-${id}`).value.trim(),
+      phone: document.getElementById(`phone-${id}`).value.trim(),
+      email: document.getElementById(`email-${id}`).value.trim(),
+      birth_date: document.getElementById(`birth-${id}`).value,
+      gender: document.getElementById(`gender-${id}`).value,
+      biography: document.getElementById(`bio-${id}`).value.trim(),
+      agreement: true,
+      languages: Array.from(
+        document.getElementById(`languages-${id}`).selectedOptions
+      ).map((option) => Number(option.value)),
+    };
 
-  const result = await requestJSON(`/admin/applications/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  });
+    const result = await requestJSON(`/admin/applications/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
 
-  showMessage(result.message || 'Заявка обновлена');
-  await loadApplications();
-  await loadStats();
+    showMessage(result.message || 'Заявка обновлена', 'success');
+
+    await loadAdminData();
+  } catch (error) {
+    showMessage(error.message, 'error');
+  }
 }
 
 async function deleteApplication(id) {
-  if (!confirm('Удалить заявку?')) return;
+  const confirmed = confirm(`Удалить заявку #${id}?`);
 
-  const result = await requestJSON(`/admin/applications/${id}`, {
-    method: 'DELETE',
-  });
+  if (!confirmed) return;
 
-  showMessage(result.message || 'Заявка удалена');
-  await loadApplications();
-  await loadStats();
+  try {
+    const result = await requestJSON(`/admin/applications/${id}`, {
+      method: 'DELETE',
+    });
+
+    showMessage(result.message || 'Заявка удалена', 'success');
+
+    await loadAdminData();
+  } catch (error) {
+    showMessage(error.message, 'error');
+  }
 }
 
 async function loadStats() {
@@ -159,12 +192,36 @@ async function loadStats() {
   const stats = result.data || {};
   const languages = stats.languages || [];
 
-  document.getElementById('statsTable').innerHTML = `
-    <p>Всего заявок: <b>${stats.total_applications}</b></p>
-    <p>Всего пользователей: <b>${stats.total_users}</b></p>
-    <p>Всего сессий: <b>${stats.total_sessions}</b></p>
+  renderStatsCards(stats);
+  renderStatsTable(languages);
+}
 
-    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">
+function renderStatsCards(stats) {
+  const container = document.getElementById('statsCards');
+
+  container.innerHTML = `
+    <div class="stat-card">
+      <span>Всего заявок</span>
+      <strong>${stats.total_applications ?? 0}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Пользователей</span>
+      <strong>${stats.total_users ?? 0}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Активных сессий</span>
+      <strong>${stats.total_sessions ?? 0}</strong>
+    </div>
+  `;
+}
+
+function renderStatsTable(languages) {
+  const container = document.getElementById('statsTable');
+
+  container.innerHTML = `
+    <table class="stats-table">
       <thead>
         <tr>
           <th>Язык</th>
@@ -172,10 +229,10 @@ async function loadStats() {
         </tr>
       </thead>
       <tbody>
-        ${languages.map(item => `
+        ${languages.map((item) => `
           <tr>
             <td>${escapeHTML(item.language)}</td>
-            <td>${item.count}</td>
+            <td><span class="badge">${item.count}</span></td>
           </tr>
         `).join('')}
       </tbody>
@@ -183,9 +240,15 @@ async function loadStats() {
   `;
 }
 
-function showMessage(message) {
-  const block = document.getElementById('adminMessage');
-  block.textContent = message;
+function showMessage(message, type) {
+  const messageBlock = document.getElementById('adminMessage');
+
+  messageBlock.textContent = message;
+  messageBlock.className = `admin-message ${type}`;
+
+  setTimeout(() => {
+    messageBlock.className = 'admin-message hidden';
+  }, 3500);
 }
 
 function escapeHTML(value) {

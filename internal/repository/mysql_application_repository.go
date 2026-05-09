@@ -200,12 +200,18 @@ WHERE id = ?
 }
 
 func (r *MySQLApplicationRepository) Delete(id int) error {
-	query := `
-		DELETE FROM applications
-		WHERE id = ?
-	`
+	_, err := r.db.Exec(
+		"DELETE FROM application_languages WHERE application_id = ?",
+		id,
+	)
+	if err != nil {
+		return err
+	}
 
-	result, err := r.db.Exec(query, id)
+	result, err := r.db.Exec(
+		"DELETE FROM applications WHERE id = ?",
+		id,
+	)
 	if err != nil {
 		return err
 	}

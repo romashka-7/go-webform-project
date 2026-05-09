@@ -1,3 +1,104 @@
+# Go Web Form Project
+
+Учебный fullstack проект на Go, демонстрирующий построение полноценного web application:
+
+- REST API
+- middleware architecture
+- authentication/sessions/cookies
+- protected routes
+- MySQL
+- normalized relational database
+- frontend/backend integration
+- admin panel
+- fetch API
+- CRUD operations
+- request pipeline
+
+---
+
+## Stack
+
+Backend:
+- Go
+- net/http
+- MySQL
+- REST API
+- middleware
+- cookies/sessions
+
+Frontend:
+- HTML
+- CSS
+- JavaScript
+- fetch API
+
+Database:
+- MySQL
+- many-to-many relations
+- normalized schema
+
+---
+
+## Features
+
+- registration flow
+- auto generated login/password
+- session authorization
+- protected user routes
+- owner access control
+- frontend edit mode
+- auth persistence
+- logout flow
+- admin panel
+- admin statistics
+- language analytics
+- responsive frontend
+
+---
+
+## Architecture
+
+```text
+request
+↓
+router
+↓
+middleware
+↓
+handler
+↓
+service
+↓
+repository
+↓
+MySQL
+```
+
+# Project structure
+
+cmd/server
+
+internal/
+    app/
+    config/
+    domain/
+    http/
+        handlers/
+        middleware/
+        router.go
+    repository/
+    security/
+    service/
+    validation/
+
+migrations/
+
+web/
+    templates/
+    static/
+
+
+
 # First commit (router and form)
 
 Запустил сервер в main.go с помощью созданного роутера

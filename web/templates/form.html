@@ -165,20 +165,21 @@
           </p>
 
           <form id="loginForm" class="contact-form" novalidate>
-            <button id="logoutBtn" class="btn submit-btn" style="display:none;">
-  Выйти из аккаунта
-</button>
             <div class="form-group">
               <label for="login">Логин *</label>
               <input type="text" id="login" name="login" autocomplete="username" required />
             </div>
-
+            
             <div class="form-group">
               <label for="password">Пароль *</label>
               <input type="password" id="password" name="password" autocomplete="current-password" required />
             </div>
-
+            
             <button type="submit" class="btn submit-btn">Войти</button>
+            <br>
+            <button id="logoutBtn" class="btn submit-btn" style="display:none;margin-top: 16px;">
+  Выйти из аккаунта
+</button>
             <div class="form-message" id="loginMessage"></div>
           </form>
         </div>

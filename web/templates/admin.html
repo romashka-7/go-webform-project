@@ -2,23 +2,81 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Админ-панель</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/admin.css" />
 </head>
 <body>
-  <main class="section">
-    <div class="container">
-      <h1 class="section-title">Панель администратора</h1>
+  <div class="admin-layout">
 
-      <div class="form-message success" id="adminMessage"></div>
+    <aside class="sidebar">
+      <div class="sidebar-logo">Admin Panel</div>
 
-      <h2>Заявки</h2>
-      <div id="applicationsTable"></div>
+      <nav class="sidebar-nav">
+        <a href="/admin/panel" class="active">Заявки</a>
+        <a href="/admin/stats" target="_blank">JSON статистика</a>
+        <a href="/" target="_blank">Основная форма</a>
+      </nav>
+    </aside>
 
-      <h2>Статистика языков</h2>
-      <div id="statsTable"></div>
-    </div>
-  </main>
+    <main class="admin-main">
+      <header class="admin-header">
+        <div>
+          <h1>Панель администратора</h1>
+          <p>Просмотр, редактирование и удаление заявок</p>
+        </div>
+
+        <button class="refresh-btn" id="refreshBtn">Обновить</button>
+      </header>
+
+      <section class="stats-grid" id="statsCards"></section>
+
+      <section class="panel-card">
+        <div class="panel-card-header">
+          <div>
+            <h2>Заявки пользователей</h2>
+            <p>Данные формы и выбранные языки программирования</p>
+          </div>
+        </div>
+
+        <div id="adminMessage" class="admin-message hidden"></div>
+
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>ФИО</th>
+                <th>Телефон</th>
+                <th>Email</th>
+                <th>Дата рождения</th>
+                <th>Пол</th>
+                <th>Биография</th>
+                <th>Языки</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsBody">
+              <tr>
+                <td colspan="9" class="empty-cell">Загрузка...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-card-header">
+          <div>
+            <h2>Статистика языков</h2>
+            <p>Количество пользователей по каждому языку</p>
+          </div>
+        </div>
+
+        <div id="statsTable"></div>
+      </section>
+    </main>
+  </div>
 
   <script src="/static/admin.js"></script>
 </body>
