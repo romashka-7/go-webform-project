@@ -11,7 +11,12 @@ func ApplicationsHandler(w http.ResponseWriter, r *http.Request) {
 		ApplicationAPIHandler(w, r)
 
 	case http.MethodGet:
-		GetApplicationsHandler(w, r)
+		if r.URL.Path == "/api/applications/" {
+			GetApplicationsHandler(w, r)
+			return
+		}
+
+		GetApplicationHandler(w, r)
 
 	case http.MethodPut:
 		UpdateApplicationHandler(w, r)

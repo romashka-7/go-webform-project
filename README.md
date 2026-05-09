@@ -1487,3 +1487,68 @@ backend теперь поддерживает:
     - static assets
     - frontend/backend integration
     - MySQL persistence
+
+
+# Twelve commit
+
+***добавил frontend авторизацию и edit mode***
+
+frontend теперь умеет:
+    - показывать login/password после регистрации
+    - выполнять login через fetch API
+    - получать session cookie
+    - загружать свою заявку после авторизации
+    - автоматически заполнять форму данными
+    - обновлять заявку через PUT request
+
+---
+
+***добавил получение заявки по ID***
+
+создан flow:
+
+GET /api/applications/{id}
+
+backend:
+    - получает ID из URL
+    - загружает заявку из MySQL
+    - возвращает JSON ответ
+
+---
+
+***исправил update flow***
+
+PUT теперь корректно:
+    - обновляет все поля заявки
+    - обновляет languages relation
+    - сохраняет изменения в MySQL
+
+---
+
+***добавил edit mode frontend***
+
+после login:
+
+frontend
+↓
+получает application_id
+↓
+GET application by id
+↓
+заполняет форму
+↓
+PUT update request
+
+---
+
+***итог***
+
+backend теперь поддерживает:
+
+    - login flow
+    - session auth
+    - frontend authorization
+    - application edit mode
+    - auto form loading
+    - PUT update flow
+    - full frontend/backend auth integration

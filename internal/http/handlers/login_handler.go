@@ -8,9 +8,18 @@ import (
 	"webform-go/internal/service"
 )
 
+func writeJSON(w http.ResponseWriter, statusCode int, response domain.APIResponse) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	json.NewEncoder(w).Encode(response)
+}
+
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
+		writeJSON(w, http.StatusMethodNotAllowed, domain.APIResponse{
+			Status:  "error",
+			Message: "Метод не поддерживается",
+		})
 		return
 	}
 
@@ -18,7 +27,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		http.Error(w, "Невалидный JSON", http.StatusBadRequest)
+		writeJSON(w, http.StatusBadRequest, domain.APIResponse{
+			Status:  "error",
+			Message: "Невалидный JSON",
+		})
 		return
 	}
 
@@ -26,7 +38,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, sessionID, err := svc.Login(request.Login, request.Password)
 	if err != nil {
-		http.Error(w, "Неверный логин или пароль", http.StatusUnauthorized)
+		writeJSON(w, http.StatusUnauthorized, domain.APIResponse{
+			Status:  "error",
+			Message: "Неверный логин или пароль",
+		})
 		return
 	}
 
@@ -38,7 +53,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	response := domain.APIResponse{
+	writeJSON(w, http.StatusOK, domain.APIResponse{
 		Status:  "success",
 		Message: "Авторизация успешна",
 		Data: map[string]any{
@@ -46,8 +61,5 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			"application_id": user.ApplicationID,
 			"login":          user.Login,
 		},
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	})
 }

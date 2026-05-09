@@ -78,3 +78,7 @@ func (s *ApplicationService) Logout(sessionID string) error {
 func (s *ApplicationService) GetAdminStats() (domain.AdminStats, error) {
 	return s.repo.GetAdminStats()
 }
+
+func (s *ApplicationService) GetByID(id int) (domain.Application, error) {
+	return s.repo.GetByID(id)
+}

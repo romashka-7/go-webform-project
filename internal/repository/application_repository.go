@@ -7,6 +7,8 @@ type ApplicationRepository interface {
 
 	GetAll() ([]domain.Application, error)
 
+	GetByID(id int) (domain.Application, error)
+
 	Update(id int, application domain.Application) (domain.Application, error)
 
 	Delete(id int) error

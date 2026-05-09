@@ -3,19 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Адаптивный веб-сайт | Студенческий проект Белова Романа</title>
+    <title>Go Web Form Project</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600&display=swap"
       rel="stylesheet"
     />
-   <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
   </head>
+
   <body>
     <header class="header">
       <div class="video-background">
@@ -28,33 +30,16 @@
 
       <nav class="navbar">
         <div class="container nav-container">
-          <a href="#" class="logo">WebSite</a>
+          <a href="/" class="logo">WebSite</a>
 
           <ul class="nav-menu">
-            <li class="nav-item">
-              <a href="#hero" class="nav-link">Главная</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a href="#services" class="nav-link"
-                >Услуги <i class="fas fa-chevron-down"></i
-              ></a>
-              <ul class="dropdown-menu">
-                <li><a href="#services">Веб-разработка</a></li>
-                <li><a href="#services">Дизайн</a></li>
-                <li><a href="#services">SEO</a></li>
-                <li><a href="#footer-contacts">Консультации</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a href="#about" class="nav-link">О нас</a>
-            </li>
-            <li class="nav-item">
-              <a href="#portfolio" class="nav-link">Портфолио</a>
-            </li>
-            <li class="nav-item">
-              <a href="#footer-contacts" class="nav-link">Контакты</a>
-            </li>
+            <li class="nav-item"><a href="#hero" class="nav-link">Главная</a></li>
+            <li class="nav-item"><a href="#about" class="nav-link">О нас</a></li>
+            <li class="nav-item"><a href="#portfolio" class="nav-link">Портфолио</a></li>
+            <li class="nav-item"><a href="#login-section" class="nav-link">Вход</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link">Форма</a></li>
           </ul>
+
           <div class="hamburger" id="hamburger">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -65,21 +50,11 @@
 
       <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-nav">
-          <li><a href="#" class="mobile-link">Главная</a></li>
-          <li class="mobile-dropdown">
-            <a href="#services" class="mobile-link"
-              >Услуги <i class="fas fa-chevron-down"></i
-            ></a>
-            <ul class="mobile-submenu">
-              <li><a href="#services">Веб-разработка</a></li>
-              <li><a href="#services">Дизайн</a></li>
-              <li><a href="#services">SEO</a></li>
-              <li><a href="#footer-contacts">Консультации</a></li>
-            </ul>
-          </li>
-          <li><a href="#" class="mobile-link">О нас</a></li>
-          <li><a href="#" class="mobile-link">Портфолио</a></li>
-          <li><a href="#footer-contacts" class="mobile-link">Контакты</a></li>
+          <li><a href="#hero" class="mobile-link">Главная</a></li>
+          <li><a href="#about" class="mobile-link">О нас</a></li>
+          <li><a href="#portfolio" class="mobile-link">Портфолио</a></li>
+          <li><a href="#login-section" class="mobile-link">Вход</a></li>
+          <li><a href="#contact" class="mobile-link">Форма</a></li>
         </ul>
       </div>
 
@@ -89,7 +64,7 @@
           <p class="hero-subtitle">
             Адаптивные, быстрые и эффективные сайты для вашего бизнеса
           </p>
-          <a href="#contact" class="btn hero-btn">Начать проект</a>
+          <a href="#contact" class="btn hero-btn">Заполнить форму</a>
         </div>
       </div>
     </header>
@@ -101,25 +76,20 @@
           <div class="about-content">
             <div class="about-text">
               <p>
-                Мы - команда профессионалов, специализирующаяся на создании
-                современных веб-решений. Наш подход сочетает в себе креативный
-                дизайн, передовые технологии и глубокое понимание потребностей
-                клиентов.
+                Мы создаем современные веб-решения и используем серверную обработку данных,
+                REST API, авторизацию, сессии и хранение данных в MySQL.
               </p>
               <p>
-                С каждым проектом мы стремимся не только соответствовать
-                ожиданиям, но и превосходить их, создавая продукты, которые
-                действительно работают на результат.
+                Эта страница интегрирована с Go backend и отправляет форму через Fetch API.
               </p>
             </div>
             <div class="about-image">
-              <img src="/static/assets/images/img1.jpg" />
+              <img src="/static/assets/images/img1.jpg" alt="О компании" />
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Слайдер -->
       <section class="section slider-section" id="portfolio">
         <div class="container">
           <h2 class="section-title">Наши проекты</h2>
@@ -147,10 +117,11 @@
                 <img src="/static/assets/images/img4.jpg" alt="Проект 3" />
               </div>
             </div>
-            <button class="slider-btn prev-btn" aria-label="Предыдущий слайд">
+
+            <button class="slider-btn prev-btn" type="button" aria-label="Предыдущий слайд">
               <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="slider-btn next-btn" aria-label="Следующий слайд">
+            <button class="slider-btn next-btn" type="button" aria-label="Следующий слайд">
               <i class="fas fa-chevron-right"></i>
             </button>
             <div class="slider-dots">
@@ -161,11 +132,8 @@
           </div>
         </div>
       </section>
-      <section
-        class="section services"
-        id="services"
-        style="padding: 60px 0; display: block"
-      >
+
+      <section class="section services" id="services" style="padding: 60px 0; display: block">
         <div class="container">
           <h2 class="section-title">Наши услуги</h2>
           <div class="services-grid">
@@ -188,196 +156,120 @@
           </div>
         </div>
       </section>
-      <!-- FAQ секция -->
-      <section class="section faq" id="faq">
+
+      <section class="section contact" id="login-section">
         <div class="container">
-          <h2 class="section-title">Часто задаваемые вопросы</h2>
+          <h2 class="section-title">Вход для редактирования</h2>
           <p class="section-subtitle">
-            Ответы на самые популярные вопросы о веб-разработке и наших услугах
+            Введите логин и пароль, которые были выданы после первой отправки формы.
           </p>
 
-          <div class="faq-container">
-            <div class="faq-item">
-              <button class="faq-question">
-                <span>Сколько времени занимает создание сайта?</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="faq-answer">
-                <p>
-                  Время разработки зависит от сложности проекта. Лендинг можно
-                  создать за 1-2 недели, корпоративный сайт за 3-6 недель, а
-                  интернет-магазин за 1,5-3 месяца. Точные сроки определяются
-                  после детального обсуждения требований.
-                </p>
-              </div>
+          <form id="loginForm" class="contact-form" novalidate>
+            <div class="form-group">
+              <label for="login">Логин *</label>
+              <input type="text" id="login" name="login" autocomplete="username" required />
             </div>
 
-            <div class="faq-item">
-              <button class="faq-question">
-                <span>Что входит в стоимость разработки?</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="faq-answer">
-                <p>
-                  В стоимость входит: анализ целевой аудитории, разработка
-                  прототипа, дизайн, верстка, программирование, наполнение
-                  контентом, базовая SEO-оптимизация, тестирование и обучение
-                  работе с административной панелью.
-                </p>
-              </div>
+            <div class="form-group">
+              <label for="password">Пароль *</label>
+              <input type="password" id="password" name="password" autocomplete="current-password" required />
             </div>
 
-            <div class="faq-item">
-              <button class="faq-question">
-                <span>Вы делаете адаптивный дизайн?</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="faq-answer">
-                <p>
-                  Да, все наши сайты адаптируются под все устройства:
-                  компьютеры, планшеты и смартфоны. Мы используем mobile-first
-                  подход, что обеспечивает оптимальное отображение на мобильных
-                  устройствах.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question">
-                <span>Предоставляете ли вы хостинг и домен?</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="faq-answer">
-                <p>
-                  Мы помогаем с выбором и регистрацией домена, а также с
-                  настройкой хостинга. Можем предложить проверенные
-                  хостинг-провайдеры или работать с вашим существующим
-                  хостингом. Также предоставляем услуги по технической поддержке
-                  сайта после запуска.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question">
-                <span>Можно ли вносить изменения после сдачи проекта?</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="faq-answer">
-                <p>
-                  Да, мы предоставляем гарантийный период (обычно 1 месяц), в
-                  течение которого бесплатно исправляем обнаруженные ошибки.
-                  После этого можно заказать услуги технической поддержки или
-                  отдельные доработки.
-                </p>
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <button class="faq-question">
-                <span>Как происходит процесс разработки?</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="faq-answer">
-                <p>
-                  Процесс включает: 1) Обсуждение и анализ требований, 2)
-                  Создание прототипа, 3) Разработка дизайна, 4) Верстка и
-                  программирование, 5) Наполнение контентом, 6) Тестирование, 7)
-                  Запуск и обучение. На каждом этапе вы утверждаете результат.
-                </p>
-              </div>
-            </div>
-          </div>
+            <button type="submit" class="btn submit-btn">Войти</button>
+            <div class="form-message" id="loginMessage"></div>
+          </form>
         </div>
       </section>
 
-      <!-- Форма -->
       <section class="section contact" id="contact">
         <div class="container">
-          <h2 class="section-title">Свяжитесь с нами</h2>
-          <p class="section-subtitle">
-            Заполните форму ниже, и мы свяжемся с вами в ближайшее время
+          <h2 class="section-title" id="formTitle">Свяжитесь с нами</h2>
+          <p class="section-subtitle" id="formSubtitle">
+            Заполните форму ниже, и мы свяжемся с вами в ближайшее время.
           </p>
 
-          <form id="contactForm" class="contact-form">
-            <form id="contactForm" class="contact-form">
-  <div class="form-row">
-    <div class="form-group">
-      <label for="name">ФИО *</label>
-      <input type="text" id="name" name="name" required />
-      <span class="error-message" id="nameError"></span>
-    </div>
+          <form id="contactForm" class="contact-form" novalidate>
+            <input type="hidden" id="applicationId" />
 
-    <div class="form-group">
-      <label for="email">Email *</label>
-      <input type="email" id="email" name="email" required />
-      <span class="error-message" id="emailError"></span>
-    </div>
-  </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">ФИО *</label>
+                <input type="text" id="name" name="name" required />
+                <span class="error-message" id="nameError"></span>
+              </div>
 
-  <div class="form-row">
-    <div class="form-group">
-      <label for="phone">Телефон *</label>
-      <input type="tel" id="phone" name="phone" required />
-    </div>
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required />
+                <span class="error-message" id="emailError"></span>
+              </div>
+            </div>
 
-    <div class="form-group">
-      <label for="birth_date">Дата рождения *</label>
-      <input type="date" id="birth_date" name="birth_date" required />
-    </div>
-  </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Телефон *</label>
+                <input type="tel" id="phone" name="phone" required />
+                <span class="error-message" id="phoneError"></span>
+              </div>
 
-  <div class="form-group">
-    <label>Пол *</label>
-    <div class="checkbox-group">
-      <input type="radio" id="genderMale" name="gender" value="male" required />
-      <label for="genderMale">Мужской</label>
-    </div>
-    <div class="checkbox-group">
-      <input type="radio" id="genderFemale" name="gender" value="female" required />
-      <label for="genderFemale">Женский</label>
-    </div>
-  </div>
+              <div class="form-group">
+                <label for="birth_date">Дата рождения *</label>
+                <input type="date" id="birth_date" name="birth_date" required />
+                <span class="error-message" id="birthDateError"></span>
+              </div>
+            </div>
 
-  <div class="form-group">
-    <label for="languages">Любимые языки программирования *</label>
-    <select id="languages" name="languages" multiple required>
-      <option value="1">Pascal</option>
-      <option value="2">C</option>
-      <option value="3">C++</option>
-      <option value="4">JavaScript</option>
-      <option value="5">PHP</option>
-      <option value="6">Python</option>
-      <option value="7">Java</option>
-      <option value="8">Haskell</option>
-      <option value="9">Clojure</option>
-      <option value="10">Prolog</option>
-      <option value="11">Scala</option>
-      <option value="12">Go</option>
-    </select>
-  </div>
+            <div class="form-group">
+              <label>Пол *</label>
+              <div class="checkbox-group">
+                <input type="radio" id="genderMale" name="gender" value="male" required />
+                <label for="genderMale">Мужской</label>
+              </div>
+              <div class="checkbox-group">
+                <input type="radio" id="genderFemale" name="gender" value="female" required />
+                <label for="genderFemale">Женский</label>
+              </div>
+              <span class="error-message" id="genderError"></span>
+            </div>
 
-  <div class="form-group">
-    <label for="biography">Биография *</label>
-    <textarea id="biography" name="biography" rows="5" required></textarea>
-    <span class="error-message" id="messageError"></span>
-  </div>
+            <div class="form-group">
+              <label for="languages">Любимые языки программирования *</label>
+              <select id="languages" name="languages" multiple required>
+                <option value="1">Pascal</option>
+                <option value="2">C</option>
+                <option value="3">C++</option>
+                <option value="4">JavaScript</option>
+                <option value="5">PHP</option>
+                <option value="6">Python</option>
+                <option value="7">Java</option>
+                <option value="8">Haskell</option>
+                <option value="9">Clojure</option>
+                <option value="10">Prolog</option>
+                <option value="11">Scala</option>
+                <option value="12">Go</option>
+              </select>
+              <span class="error-message" id="languagesError"></span>
+            </div>
 
-  <div class="form-group checkbox-group">
-    <input type="checkbox" id="agreement" name="agreement" required />
-    <label for="agreement">С контрактом ознакомлен *</label>
-    <span class="error-message" id="agreementError"></span>
-  </div>
+            <div class="form-group">
+              <label for="biography">Биография *</label>
+              <textarea id="biography" name="biography" rows="5" required></textarea>
+              <span class="error-message" id="biographyError"></span>
+            </div>
 
-  <button type="submit" class="btn submit-btn" id="submitBtn">
-    <span>Сохранить</span>
-    <div class="spinner hidden" id="spinner"></div>
-  </button>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="agreement" name="agreement" required />
+              <label for="agreement">С контрактом ознакомлен *</label>
+            </div>
+            <span class="error-message" id="agreementError"></span>
 
-  <div class="form-message" id="formMessage"></div>
-</form>
+            <button type="submit" class="btn submit-btn" id="submitBtn">
+              <span id="submitText">Сохранить</span>
+              <div class="spinner hidden" id="spinner"></div>
+            </button>
 
-            
+            <div class="form-message" id="formMessage"></div>
+          </form>
         </div>
       </section>
     </main>
@@ -386,17 +278,15 @@
       <div class="container">
         <div class="footer-content">
           <div class="footer-info">
-            <a href="#" class="footer-logo">WebSite</a>
+            <a href="/" class="footer-logo">WebSite</a>
             <p>Создаем современные веб-решения с 2025 года</p>
           </div>
           <div class="footer-links">
             <h3>Быстрые ссылки</h3>
             <ul>
               <li><a href="#hero">Главная</a></li>
-              <li><a href="#services">Услуги</a></li>
-              <li><a href="#about">О нас</a></li>
-              <li><a href="#portfolio">Портфолио</a></li>
-              <li><a href="#footer-contacts">Контакты</a></li>
+              <li><a href="#login-section">Вход</a></li>
+              <li><a href="#contact">Форма</a></li>
             </ul>
           </div>
           <div class="footer-contact" id="footer-contacts">

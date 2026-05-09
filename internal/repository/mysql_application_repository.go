@@ -145,7 +145,17 @@ SET
 WHERE id = ?
 	`
 
-	result, err := r.db.Exec(query, application.Name, application.Email, id)
+	result, err := r.db.Exec(
+		query,
+		application.Name,
+		application.Phone,
+		application.Email,
+		application.BirthDate,
+		application.Gender,
+		application.Biography,
+		application.Agreement,
+		id,
+	)
 	if err != nil {
 		return domain.Application{}, err
 	}
@@ -380,4 +390,48 @@ func (r *MySQLApplicationRepository) getApplicationLanguages(applicationID int) 
 	}
 
 	return languages, nil
+}
+
+func (r *MySQLApplicationRepository) GetByID(id int) (domain.Application, error) {
+	query := `
+		SELECT
+			id,
+			name,
+			COALESCE(phone, ''),
+			email,
+			COALESCE(birth_date, ''),
+			COALESCE(gender, ''),
+			COALESCE(biography, ''),
+			agreement,
+			created_at
+		FROM applications
+		WHERE id = ?
+	`
+
+	var application domain.Application
+
+	err := r.db.QueryRow(query, id).Scan(
+		&application.ID,
+		&application.Name,
+		&application.Phone,
+		&application.Email,
+		&application.BirthDate,
+		&application.Gender,
+		&application.Biography,
+		&application.Agreement,
+		&application.CreatedAt,
+	)
+
+	if err != nil {
+		return domain.Application{}, err
+	}
+
+	languages, err := r.getApplicationLanguages(application.ID)
+	if err != nil {
+		return domain.Application{}, err
+	}
+
+	application.Languages = languages
+
+	return application, nil
 }

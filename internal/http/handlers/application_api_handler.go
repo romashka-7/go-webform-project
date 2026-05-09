@@ -50,11 +50,14 @@ func ApplicationAPIHandler(w http.ResponseWriter, r *http.Request) {
 		Status:  "success",
 		Message: "Заявка успешно принята: " + createdApp.Name,
 		Data: map[string]string{
-			"login":    login,
-			"password": password,
+			"login":       login,
+			"password":    password,
+			"profile_url": "/login",
 		},
 	}
+
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 
 	json.NewEncoder(w).Encode(response)
 }
