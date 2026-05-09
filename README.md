@@ -1324,3 +1324,166 @@ backend теперь поддерживает:
 - request context
 - cleaner handlers
 ```
+
+# Eleventh commit(frontend integration and fetch API)
+
+***интегрировал responsive frontend в Go backend***
+
+старый frontend проект:
+    - перенесен в templates/static
+    - подключен через Go router
+    - теперь backend отдает полноценный frontend
+
+---
+
+***добавил static files serving***
+
+router теперь раздает:
+    - CSS
+    - JavaScript
+    - images
+    - video
+
+через:
+
+    /static/
+
+используется:
+
+    http.FileServer
+    http.StripPrefix
+
+---
+
+***перенес frontend assets***
+
+перенесены:
+    - style.css
+    - script.js
+    - images
+    - video background
+
+структура:
+
+    web/static/
+
+---
+
+***обновил form.html***
+
+форма теперь использует:
+    - fetch API
+    - JSON requests
+    - async submit
+
+убраны:
+    - form action
+    - classic POST submit
+    - FormCarry integration
+
+---
+
+***frontend теперь работает через backend API***
+
+flow:
+
+frontend
+↓
+fetch("/api/applications/")
+↓
+Go backend
+↓
+service
+↓
+repository
+↓
+MySQL
+
+---
+
+***обновил frontend fields***
+
+frontend форма теперь соответствует backend модели:
+
+    name
+    phone
+    email
+    birth_date
+    gender
+    biography
+    agreement
+    languages
+
+---
+
+***добавил multi select languages***
+
+используется:
+
+    <select multiple>
+
+JavaScript преобразует selected options в:
+
+    []int
+
+для backend JSON API
+
+---
+
+***добавил async form submit***
+
+используется:
+
+    fetch()
+
+с:
+
+    Content-Type: application/json
+
+frontend:
+    - показывает spinner
+    - показывает success message
+    - показывает error message
+    - не перезагружает страницу
+
+---
+
+***обновил FormHandler***
+
+/form теперь:
+    - только отдает HTML template
+    - больше не обрабатывает POST requests
+
+POST обработка полностью перенесена в REST API
+
+---
+
+***что изучил***
+
+fetch API
+
+async requests
+
+JSON frontend/backend communication
+
+static files serving
+
+templates
+
+frontend integration
+
+SPA-style form submit
+
+---
+
+***итог***
+
+backend теперь поддерживает:
+
+    - responsive frontend
+    - async form submit
+    - fetch API
+    - JSON communication
+    - static assets
+    - frontend/backend integration
+    - MySQL persistence

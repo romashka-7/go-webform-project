@@ -19,16 +19,28 @@ func NewMySQLApplicationRepository(db *sql.DB) *MySQLApplicationRepository {
 func (r *MySQLApplicationRepository) Save(application domain.Application) (domain.Application, error) {
 
 	query := `
-		INSERT INTO applications (name, email)
-		VALUES (?, ?)
-	`
+		INSERT INTO applications (
+		name,
+		phone,
+		email,
+		birth_date,
+		gender,
+		biography,
+		agreement
+		)
+			VALUES (?, ?, ?, ?, ?, ?, ?)
+		`
 
 	result, err := r.db.Exec(
 		query,
 		application.Name,
+		application.Phone,
 		application.Email,
+		application.BirthDate,
+		application.Gender,
+		application.Biography,
+		application.Agreement,
 	)
-
 	if err != nil {
 		return domain.Application{}, err
 	}
@@ -63,7 +75,16 @@ func (r *MySQLApplicationRepository) Save(application domain.Application) (domai
 func (r *MySQLApplicationRepository) GetAll() ([]domain.Application, error) {
 
 	query := `
-		SELECT id, name, email
+		SELECT
+			id,
+			name,
+			COALESCE(phone, ''),
+			email,
+			COALESCE(birth_date, ''),
+			COALESCE(gender, ''),
+			COALESCE(biography, ''),
+			agreement,
+			created_at
 		FROM applications
 		ORDER BY id DESC
 	`
@@ -85,13 +106,25 @@ func (r *MySQLApplicationRepository) GetAll() ([]domain.Application, error) {
 		err := rows.Scan(
 			&application.ID,
 			&application.Name,
+			&application.Phone,
 			&application.Email,
+			&application.BirthDate,
+			&application.Gender,
+			&application.Biography,
+			&application.Agreement,
+			&application.CreatedAt,
 		)
+		if err != nil {
+			return nil, err
+		}
+
+		languages, err := r.getApplicationLanguages(application.ID)
 
 		if err != nil {
 			return nil, err
 		}
 
+		application.Languages = languages
 		applications = append(applications, application)
 	}
 
@@ -101,8 +134,15 @@ func (r *MySQLApplicationRepository) GetAll() ([]domain.Application, error) {
 func (r *MySQLApplicationRepository) Update(id int, application domain.Application) (domain.Application, error) {
 	query := `
 		UPDATE applications
-		SET name = ?, email = ?
-		WHERE id = ?
+SET
+	name = ?,
+	phone = ?,
+	email = ?,
+	birth_date = ?,
+	gender = ?,
+	biography = ?,
+	agreement = ?
+WHERE id = ?
 	`
 
 	result, err := r.db.Exec(query, application.Name, application.Email, id)
@@ -309,4 +349,35 @@ func (r *MySQLApplicationRepository) GetAdminStats() (domain.AdminStats, error) 
 	}
 
 	return stats, nil
+}
+
+func (r *MySQLApplicationRepository) getApplicationLanguages(applicationID int) ([]int, error) {
+
+	rows, err := r.db.Query(`
+		SELECT language_id
+		FROM application_languages
+		WHERE application_id = ?
+	`, applicationID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	languages := []int{}
+
+	for rows.Next() {
+
+		var languageID int
+
+		err := rows.Scan(&languageID)
+		if err != nil {
+			return nil, err
+		}
+
+		languages = append(languages, languageID)
+	}
+
+	return languages, nil
 }

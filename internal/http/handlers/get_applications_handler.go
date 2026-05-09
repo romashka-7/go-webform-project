@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"webform-go/internal/domain"
 	"webform-go/internal/service"
@@ -18,6 +19,7 @@ func GetApplicationsHandler(w http.ResponseWriter, r *http.Request) {
 	application, err := svc.GetAll()
 
 	if err != nil {
+		log.Println(err)
 		http.Error(w, "Ошибка получения вызова", http.StatusInternalServerError)
 		return
 	}

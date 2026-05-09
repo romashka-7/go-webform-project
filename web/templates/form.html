@@ -1,25 +1,417 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <title>WebForm GO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Адаптивный веб-сайт | Студенческий проект Белова Романа</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+   <link rel="stylesheet" href="/static/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
-    <h1>Форма заявки</h1>
+    <header class="header">
+      <div class="video-background">
+        <video autoplay muted loop playsinline id="bg-video">
+          <source src="/static/video.mp4" type="video/mp4" />
+          Ваш браузер не поддерживает видео.
+        </video>
+        <div class="video-overlay"></div>
+      </div>
 
-    <form method="POST" action="/form">
-      <label>Имя:</label>
-      <input type="text" name="name" />
+      <nav class="navbar">
+        <div class="container nav-container">
+          <a href="#" class="logo">WebSite</a>
 
-      <br />
+          <ul class="nav-menu">
+            <li class="nav-item">
+              <a href="#hero" class="nav-link">Главная</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="#services" class="nav-link"
+                >Услуги <i class="fas fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown-menu">
+                <li><a href="#services">Веб-разработка</a></li>
+                <li><a href="#services">Дизайн</a></li>
+                <li><a href="#services">SEO</a></li>
+                <li><a href="#footer-contacts">Консультации</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="#about" class="nav-link">О нас</a>
+            </li>
+            <li class="nav-item">
+              <a href="#portfolio" class="nav-link">Портфолио</a>
+            </li>
+            <li class="nav-item">
+              <a href="#footer-contacts" class="nav-link">Контакты</a>
+            </li>
+          </ul>
+          <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </nav>
 
-      <label>Email:</label>
-      <input type="email" name="email" />
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav">
+          <li><a href="#" class="mobile-link">Главная</a></li>
+          <li class="mobile-dropdown">
+            <a href="#services" class="mobile-link"
+              >Услуги <i class="fas fa-chevron-down"></i
+            ></a>
+            <ul class="mobile-submenu">
+              <li><a href="#services">Веб-разработка</a></li>
+              <li><a href="#services">Дизайн</a></li>
+              <li><a href="#services">SEO</a></li>
+              <li><a href="#footer-contacts">Консультации</a></li>
+            </ul>
+          </li>
+          <li><a href="#" class="mobile-link">О нас</a></li>
+          <li><a href="#" class="mobile-link">Портфолио</a></li>
+          <li><a href="#footer-contacts" class="mobile-link">Контакты</a></li>
+        </ul>
+      </div>
 
-      <br />
+      <div class="hero" id="hero">
+        <div class="container">
+          <h1 class="hero-title">Создаем современные веб-решения</h1>
+          <p class="hero-subtitle">
+            Адаптивные, быстрые и эффективные сайты для вашего бизнеса
+          </p>
+          <a href="#contact" class="btn hero-btn">Начать проект</a>
+        </div>
+      </div>
+    </header>
 
-      <button type="submit">Отправить</button>
-    </form>
+    <main>
+      <section class="section about" id="about">
+        <div class="container">
+          <h2 class="section-title">О нашей компании</h2>
+          <div class="about-content">
+            <div class="about-text">
+              <p>
+                Мы - команда профессионалов, специализирующаяся на создании
+                современных веб-решений. Наш подход сочетает в себе креативный
+                дизайн, передовые технологии и глубокое понимание потребностей
+                клиентов.
+              </p>
+              <p>
+                С каждым проектом мы стремимся не только соответствовать
+                ожиданиям, но и превосходить их, создавая продукты, которые
+                действительно работают на результат.
+              </p>
+            </div>
+            <div class="about-image">
+              <img src="/static/assets/images/img1.jpg" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Слайдер -->
+      <section class="section slider-section" id="portfolio">
+        <div class="container">
+          <h2 class="section-title">Наши проекты</h2>
+          <div class="slider-container">
+            <div class="slider">
+              <div class="slider-item active">
+                <div class="slider-content">
+                  <h3>Корпоративный сайт</h3>
+                  <p>Современный дизайн с адаптивной версткой</p>
+                </div>
+                <img src="/static/assets/images/img2.png" alt="Проект 1" />
+              </div>
+              <div class="slider-item">
+                <div class="slider-content">
+                  <h3>Интернет-магазин</h3>
+                  <p>Полный цикл разработки с интеграцией платежей</p>
+                </div>
+                <img src="/static/assets/images/img3.png" alt="Проект 2" />
+              </div>
+              <div class="slider-item">
+                <div class="slider-content">
+                  <h3>Мобильное приложение</h3>
+                  <p>Кроссплатформенное решение для iOS и Android</p>
+                </div>
+                <img src="/static/assets/images/img4.jpg" alt="Проект 3" />
+              </div>
+            </div>
+            <button class="slider-btn prev-btn" aria-label="Предыдущий слайд">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-btn next-btn" aria-label="Следующий слайд">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="slider-dots">
+              <span class="dot active" data-slide="0"></span>
+              <span class="dot" data-slide="1"></span>
+              <span class="dot" data-slide="2"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="section services"
+        id="services"
+        style="padding: 60px 0; display: block"
+      >
+        <div class="container">
+          <h2 class="section-title">Наши услуги</h2>
+          <div class="services-grid">
+            <div class="service-card">
+              <h3>Веб-разработка</h3>
+              <p>Создание современных сайтов и веб-приложений.</p>
+            </div>
+            <div class="service-card">
+              <h3>Дизайн</h3>
+              <p>Уникальный дизайн для вашего проекта.</p>
+            </div>
+            <div class="service-card">
+              <h3>SEO</h3>
+              <p>Продвижение сайтов в поисковых системах.</p>
+            </div>
+            <div class="service-card">
+              <h3>Консультации</h3>
+              <p>Профессиональные консультации по разработке.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- FAQ секция -->
+      <section class="section faq" id="faq">
+        <div class="container">
+          <h2 class="section-title">Часто задаваемые вопросы</h2>
+          <p class="section-subtitle">
+            Ответы на самые популярные вопросы о веб-разработке и наших услугах
+          </p>
+
+          <div class="faq-container">
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Сколько времени занимает создание сайта?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Время разработки зависит от сложности проекта. Лендинг можно
+                  создать за 1-2 недели, корпоративный сайт за 3-6 недель, а
+                  интернет-магазин за 1,5-3 месяца. Точные сроки определяются
+                  после детального обсуждения требований.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Что входит в стоимость разработки?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  В стоимость входит: анализ целевой аудитории, разработка
+                  прототипа, дизайн, верстка, программирование, наполнение
+                  контентом, базовая SEO-оптимизация, тестирование и обучение
+                  работе с административной панелью.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Вы делаете адаптивный дизайн?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Да, все наши сайты адаптируются под все устройства:
+                  компьютеры, планшеты и смартфоны. Мы используем mobile-first
+                  подход, что обеспечивает оптимальное отображение на мобильных
+                  устройствах.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Предоставляете ли вы хостинг и домен?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Мы помогаем с выбором и регистрацией домена, а также с
+                  настройкой хостинга. Можем предложить проверенные
+                  хостинг-провайдеры или работать с вашим существующим
+                  хостингом. Также предоставляем услуги по технической поддержке
+                  сайта после запуска.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Можно ли вносить изменения после сдачи проекта?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Да, мы предоставляем гарантийный период (обычно 1 месяц), в
+                  течение которого бесплатно исправляем обнаруженные ошибки.
+                  После этого можно заказать услуги технической поддержки или
+                  отдельные доработки.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Как происходит процесс разработки?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Процесс включает: 1) Обсуждение и анализ требований, 2)
+                  Создание прототипа, 3) Разработка дизайна, 4) Верстка и
+                  программирование, 5) Наполнение контентом, 6) Тестирование, 7)
+                  Запуск и обучение. На каждом этапе вы утверждаете результат.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Форма -->
+      <section class="section contact" id="contact">
+        <div class="container">
+          <h2 class="section-title">Свяжитесь с нами</h2>
+          <p class="section-subtitle">
+            Заполните форму ниже, и мы свяжемся с вами в ближайшее время
+          </p>
+
+          <form id="contactForm" class="contact-form">
+            <form id="contactForm" class="contact-form">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">ФИО *</label>
+      <input type="text" id="name" name="name" required />
+      <span class="error-message" id="nameError"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" required />
+      <span class="error-message" id="emailError"></span>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="phone">Телефон *</label>
+      <input type="tel" id="phone" name="phone" required />
+    </div>
+
+    <div class="form-group">
+      <label for="birth_date">Дата рождения *</label>
+      <input type="date" id="birth_date" name="birth_date" required />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Пол *</label>
+    <div class="checkbox-group">
+      <input type="radio" id="genderMale" name="gender" value="male" required />
+      <label for="genderMale">Мужской</label>
+    </div>
+    <div class="checkbox-group">
+      <input type="radio" id="genderFemale" name="gender" value="female" required />
+      <label for="genderFemale">Женский</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="languages">Любимые языки программирования *</label>
+    <select id="languages" name="languages" multiple required>
+      <option value="1">Pascal</option>
+      <option value="2">C</option>
+      <option value="3">C++</option>
+      <option value="4">JavaScript</option>
+      <option value="5">PHP</option>
+      <option value="6">Python</option>
+      <option value="7">Java</option>
+      <option value="8">Haskell</option>
+      <option value="9">Clojure</option>
+      <option value="10">Prolog</option>
+      <option value="11">Scala</option>
+      <option value="12">Go</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="biography">Биография *</label>
+    <textarea id="biography" name="biography" rows="5" required></textarea>
+    <span class="error-message" id="messageError"></span>
+  </div>
+
+  <div class="form-group checkbox-group">
+    <input type="checkbox" id="agreement" name="agreement" required />
+    <label for="agreement">С контрактом ознакомлен *</label>
+    <span class="error-message" id="agreementError"></span>
+  </div>
+
+  <button type="submit" class="btn submit-btn" id="submitBtn">
+    <span>Сохранить</span>
+    <div class="spinner hidden" id="spinner"></div>
+  </button>
+
+  <div class="form-message" id="formMessage"></div>
+</form>
+
+            
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-info">
+            <a href="#" class="footer-logo">WebSite</a>
+            <p>Создаем современные веб-решения с 2025 года</p>
+          </div>
+          <div class="footer-links">
+            <h3>Быстрые ссылки</h3>
+            <ul>
+              <li><a href="#hero">Главная</a></li>
+              <li><a href="#services">Услуги</a></li>
+              <li><a href="#about">О нас</a></li>
+              <li><a href="#portfolio">Портфолио</a></li>
+              <li><a href="#footer-contacts">Контакты</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact" id="footer-contacts">
+            <h3>Контакты</h3>
+            <p><i class="fas fa-envelope"></i> romanbelov8913@gmail.com</p>
+            <p><i class="fas fa-phone"></i> +7 (908) 950 33 77</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Веб-сайт. Все права защищены.</p>
+          <p>Студенческий проект Белова Романа</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/static/script.js"></script>
   </body>
-  <script src="/web/static/script.js"></script>
 </html>
