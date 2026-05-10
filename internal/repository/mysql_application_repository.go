@@ -132,20 +132,35 @@ func (r *MySQLApplicationRepository) GetAll() ([]domain.Application, error) {
 }
 
 func (r *MySQLApplicationRepository) Update(id int, application domain.Application) (domain.Application, error) {
+	var exists int
+
+	err := r.db.QueryRow(
+		"SELECT COUNT(*) FROM applications WHERE id = ?",
+		id,
+	).Scan(&exists)
+
+	if err != nil {
+		return domain.Application{}, err
+	}
+
+	if exists == 0 {
+		return domain.Application{}, sql.ErrNoRows
+	}
+
 	query := `
 		UPDATE applications
-SET
-	name = ?,
-	phone = ?,
-	email = ?,
-	birth_date = ?,
-	gender = ?,
-	biography = ?,
-	agreement = ?
-WHERE id = ?
+		SET
+			name = ?,
+			phone = ?,
+			email = ?,
+			birth_date = ?,
+			gender = ?,
+			biography = ?,
+			agreement = ?
+		WHERE id = ?
 	`
 
-	result, err := r.db.Exec(
+	_, err = r.db.Exec(
 		query,
 		application.Name,
 		application.Phone,
@@ -156,33 +171,23 @@ WHERE id = ?
 		application.Agreement,
 		id,
 	)
+
 	if err != nil {
 		return domain.Application{}, err
 	}
 
-	rowsAffected, err := result.RowsAffected()
+	_, err = r.db.Exec(
+		"DELETE FROM application_languages WHERE application_id = ?",
+		id,
+	)
+
 	if err != nil {
 		return domain.Application{}, err
 	}
-
-	if rowsAffected == 0 {
-		return domain.Application{}, sql.ErrNoRows
-	}
-
-	application.ID = id
-	_, err = r.db.Exec(`
-	DELETE FROM application_languages
-	WHERE application_id = ?
-	`, id)
 
 	for _, languageID := range application.Languages {
-		_, err := r.db.Exec(`
-		INSERT INTO application_languages (
-			application_id,
-			language_id
-		)
-		VALUES (?, ?)
-	`,
+		_, err = r.db.Exec(
+			"INSERT INTO application_languages (application_id, language_id) VALUES (?, ?)",
 			id,
 			languageID,
 		)
@@ -192,10 +197,8 @@ WHERE id = ?
 		}
 	}
 
-	if err != nil {
-		return domain.Application{}, err
-	}
 	application.ID = id
+
 	return application, nil
 }
 

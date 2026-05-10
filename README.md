@@ -1,3 +1,8 @@
+![Go](https://img.shields.io/badge/Go-1.24-blue)
+![MySQL](https://img.shields.io/badge/MySQL-Database-orange)
+![REST API](https://img.shields.io/badge/API-REST-green)
+![Frontend](https://img.shields.io/badge/Frontend-Fetch_API-purple)
+
 # Go Web Form Project
 
 Учебный fullstack проект на Go, демонстрирующий построение полноценного web application:
@@ -1751,3 +1756,111 @@ frontend/backend теперь поддерживают:
     - frontend edit mode
     - session restore
     - SPA-like behavior
+
+
+
+
+
+# Fourteenth commmit
+
+полностью обновлен frontend дизайн формы
+
+frontend теперь использует более clean developer oriented UI:
+    - dark tech style
+    - backend/dev visual style
+    - glassmorphism cards
+    - grid background
+    - improved typography
+    - modern buttons
+    - cleaner sections
+
+---
+
+***обновлен login section***
+
+раньше login block выглядел как обычная форма сайта
+
+теперь:
+    - используется отдельная auth card
+    - улучшены spacing и hierarchy
+    - добавлены session auth badges
+    - улучшен visual focus на authorization flow
+
+---
+
+***полностью обновлен contact form UI***
+
+обновлены:
+    - form layout
+    - responsive grid
+    - labels
+    - placeholders
+    - inputs
+    - textarea
+    - select multiple
+    - radio cards
+
+форма теперь визуально выглядит как часть backend web application,
+а не как template landing page
+
+---
+
+***исправлены проблемы input-shell***
+
+раньше:
+    - иконки накладывались на placeholder
+    - текст начинался под icon
+    - date input ломал layout
+
+теперь:
+    - input-shell использует proper positioning
+    - добавлен padding-left для inputs
+    - исправлен date input spacing
+    - placeholders отображаются корректно
+
+---
+
+***обновлены radio buttons***
+
+старые radio inputs выглядели стандартно и выбивались из дизайна
+
+теперь:
+    - используются custom gender cards
+    - добавлен active state
+    - improved hover effects
+    - unified dark UI style
+
+---
+
+***улучшен общий frontend style***
+
+обновлены:
+    - navbar
+    - buttons
+    - cards
+    - form containers
+    - shadows
+    - borders
+    - colors
+    - transitions
+
+frontend теперь выглядит более:
+    - minimal
+    - developer oriented
+    - backend portfolio styled
+
+---
+
+***ВАЖНО***
+
+backend architecture и JS logic НЕ изменялись
+
+все существующие:
+    - fetch requests
+    - auth flow
+    - edit mode
+    - session restore
+    - logout flow
+    - API integration
+
+работают как и раньше

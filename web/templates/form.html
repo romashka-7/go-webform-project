@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/static/style.css" />
@@ -19,6 +19,8 @@
   </head>
 
   <body>
+    <div class="page-bg"></div>
+
     <header class="header">
       <div class="video-background">
         <video autoplay muted loop playsinline id="bg-video">
@@ -30,41 +32,83 @@
 
       <nav class="navbar">
         <div class="container nav-container">
-          <a href="/" class="logo">WebSite</a>
+          <a href="/" class="logo">
+            <span class="logo-mark">Go</span>
+            <span>WebForm</span>
+          </a>
 
           <ul class="nav-menu">
             <li class="nav-item"><a href="#hero" class="nav-link">Главная</a></li>
-            <li class="nav-item"><a href="#about" class="nav-link">О нас</a></li>
-            <li class="nav-item"><a href="#portfolio" class="nav-link">Портфолио</a></li>
+            <li class="nav-item"><a href="#about" class="nav-link">О проекте</a></li>
+            <li class="nav-item"><a href="#portfolio" class="nav-link">Архитектура</a></li>
             <li class="nav-item"><a href="#login-section" class="nav-link">Вход</a></li>
-            <li class="nav-item"><a href="#contact" class="nav-link">Форма</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link nav-link-accent">Форма</a></li>
           </ul>
 
-          <div class="hamburger" id="hamburger">
+          <button class="hamburger" id="hamburger" type="button" aria-label="Открыть меню">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
-          </div>
+          </button>
         </div>
       </nav>
 
       <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-nav">
           <li><a href="#hero" class="mobile-link">Главная</a></li>
-          <li><a href="#about" class="mobile-link">О нас</a></li>
-          <li><a href="#portfolio" class="mobile-link">Портфолио</a></li>
+          <li><a href="#about" class="mobile-link">О проекте</a></li>
+          <li><a href="#portfolio" class="mobile-link">Архитектура</a></li>
           <li><a href="#login-section" class="mobile-link">Вход</a></li>
           <li><a href="#contact" class="mobile-link">Форма</a></li>
         </ul>
       </div>
 
       <div class="hero" id="hero">
-        <div class="container">
-          <h1 class="hero-title">Создаем современные веб-решения</h1>
-          <p class="hero-subtitle">
-            Адаптивные, быстрые и эффективные сайты для вашего бизнеса
-          </p>
-          <a href="#contact" class="btn hero-btn">Заполнить форму</a>
+        <div class="container hero-grid">
+          <div class="hero-content">
+            <span class="eyebrow">Full Stack Web Application</span>
+            <h1 class="hero-title">
+              Go Web Form Project
+            </h1>
+            <p class="hero-subtitle">
+              Учебное mini web application на Go: REST API, авторизация, сессии,
+              MySQL, protected routes и admin panel.
+            </p>
+
+            <div class="tech-badges">
+              <span>Go</span>
+              <span>MySQL</span>
+              <span>REST API</span>
+              <span>Sessions</span>
+              <span>Fetch API</span>
+              <span>Admin Panel</span>
+            </div>
+
+            <div class="hero-actions">
+              <a href="#contact" class="btn hero-btn">Создать заявку</a>
+              <a href="#portfolio" class="btn ghost-btn">Посмотреть архитектуру</a>
+            </div>
+          </div>
+
+          <div class="hero-panel">
+            <div class="panel-header">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+              <span class="panel-title">request flow</span>
+            </div>
+            <div class="code-flow">
+              <div>Frontend</div>
+              <i class="fas fa-arrow-down"></i>
+              <div>Fetch API</div>
+              <i class="fas fa-arrow-down"></i>
+              <div>Go handlers</div>
+              <i class="fas fa-arrow-down"></i>
+              <div>Service layer</div>
+              <i class="fas fa-arrow-down"></i>
+              <div>MySQL repository</div>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -72,139 +116,182 @@
     <main>
       <section class="section about" id="about">
         <div class="container">
-          <h2 class="section-title">О нашей компании</h2>
-          <div class="about-content">
-            <div class="about-text">
-              <p>
-                Мы создаем современные веб-решения и используем серверную обработку данных,
-                REST API, авторизацию, сессии и хранение данных в MySQL.
-              </p>
-              <p>
-                Эта страница интегрирована с Go backend и отправляет форму через Fetch API.
-              </p>
+          <div class="section-head">
+            <span class="section-badge">About project</span>
+            <h2 class="section-title">Не просто форма, а связанное web-приложение</h2>
+            <p class="section-subtitle">
+              Страница работает как frontend для Go backend: данные отправляются через JSON API,
+              пользователь получает доступ для редактирования, а админ видит заявки и статистику.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <i class="fas fa-code"></i>
+              <h3>REST API</h3>
+              <p>GET, POST, PUT и DELETE для работы с заявками.</p>
+            </article>
+
+            <article class="feature-card">
+              <i class="fas fa-lock"></i>
+              <h3>Auth & sessions</h3>
+              <p>Login/logout, cookie sessions и автоматическое восстановление входа.</p>
+            </article>
+
+            <article class="feature-card">
+              <i class="fas fa-database"></i>
+              <h3>MySQL storage</h3>
+              <p>Нормализованная схема, связи many-to-many и загрузка языков.</p>
+            </article>
+
+            <article class="feature-card">
+              <i class="fas fa-chart-line"></i>
+              <h3>Admin panel</h3>
+              <p>Таблица заявок, редактирование, удаление и статистика.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section architecture" id="portfolio">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-badge">Architecture</span>
+            <h2 class="section-title">Слоистая архитектура проекта</h2>
+            <p class="section-subtitle">
+              Код разделен по зонам ответственности: HTTP-слой, middleware,
+              сервисы, репозитории, доменные модели и валидация.
+            </p>
+          </div>
+
+          <div class="architecture-grid">
+            <div class="architecture-card">
+              <h3>Request pipeline</h3>
+              <div class="architecture-flow">
+                <span>Browser</span>
+                <i class="fas fa-arrow-right"></i>
+                <span>ServeMux</span>
+                <i class="fas fa-arrow-right"></i>
+                <span>Middleware</span>
+                <i class="fas fa-arrow-right"></i>
+                <span>Handler</span>
+                <i class="fas fa-arrow-right"></i>
+                <span>Service</span>
+                <i class="fas fa-arrow-right"></i>
+                <span>Repository</span>
+                <i class="fas fa-arrow-right"></i>
+                <span>MySQL</span>
+              </div>
             </div>
-            <div class="about-image">
-              <img src="/static/assets/images/img1.jpg" alt="О компании" />
+
+            <div class="architecture-card">
+              <h3>Core modules</h3>
+              <div class="module-list">
+                <span>cmd/server</span>
+                <span>internal/http</span>
+                <span>internal/service</span>
+                <span>internal/repository</span>
+                <span>internal/security</span>
+                <span>internal/validation</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section slider-section" id="portfolio">
-        <div class="container">
-          <h2 class="section-title">Наши проекты</h2>
-          <div class="slider-container">
-            <div class="slider">
-              <div class="slider-item active">
-                <div class="slider-content">
-                  <h3>Корпоративный сайт</h3>
-                  <p>Современный дизайн с адаптивной версткой</p>
-                </div>
-                <img src="/static/assets/images/img2.png" alt="Проект 1" />
-              </div>
-              <div class="slider-item">
-                <div class="slider-content">
-                  <h3>Интернет-магазин</h3>
-                  <p>Полный цикл разработки с интеграцией платежей</p>
-                </div>
-                <img src="/static/assets/images/img3.png" alt="Проект 2" />
-              </div>
-              <div class="slider-item">
-                <div class="slider-content">
-                  <h3>Мобильное приложение</h3>
-                  <p>Кроссплатформенное решение для iOS и Android</p>
-                </div>
-                <img src="/static/assets/images/img4.jpg" alt="Проект 3" />
-              </div>
-            </div>
-
-            <button class="slider-btn prev-btn" type="button" aria-label="Предыдущий слайд">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="slider-btn next-btn" type="button" aria-label="Следующий слайд">
-              <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="slider-dots">
-              <span class="dot active" data-slide="0"></span>
-              <span class="dot" data-slide="1"></span>
-              <span class="dot" data-slide="2"></span>
-            </div>
+      <section class="section auth-section" id="login-section">
+        <div class="container narrow-container">
+          <div class="section-head">
+            <span class="section-badge">Session auth</span>
+            <h2 class="section-title">Вход для редактирования</h2>
+            <p class="section-subtitle">
+              После первой отправки формы backend создает пользователя и выдает логин с паролем.
+            </p>
           </div>
-        </div>
-      </section>
 
-      <section class="section services" id="services" style="padding: 60px 0; display: block">
-        <div class="container">
-          <h2 class="section-title">Наши услуги</h2>
-          <div class="services-grid">
-            <div class="service-card">
-              <h3>Веб-разработка</h3>
-              <p>Создание современных сайтов и веб-приложений.</p>
-            </div>
-            <div class="service-card">
-              <h3>Дизайн</h3>
-              <p>Уникальный дизайн для вашего проекта.</p>
-            </div>
-            <div class="service-card">
-              <h3>SEO</h3>
-              <p>Продвижение сайтов в поисковых системах.</p>
-            </div>
-            <div class="service-card">
-              <h3>Консультации</h3>
-              <p>Профессиональные консультации по разработке.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section contact" id="login-section">
-        <div class="container">
-          <h2 class="section-title">Вход для редактирования</h2>
-          <p class="section-subtitle">
-            Введите логин и пароль, которые были выданы после первой отправки формы.
-          </p>
-
-          <form id="loginForm" class="contact-form" novalidate>
+          <form id="loginForm" class="app-form login-form" novalidate>
             <div class="form-group">
               <label for="login">Логин *</label>
-              <input type="text" id="login" name="login" autocomplete="username" required />
+              <div class="input-shell">
+                <i class="fas fa-user"></i>
+                <input
+                  type="text"
+                  id="login"
+                  name="login"
+                  autocomplete="username"
+                  required
+                  placeholder="user_17784052"
+                />
+              </div>
             </div>
-            
+
             <div class="form-group">
               <label for="password">Пароль *</label>
-              <input type="password" id="password" name="password" autocomplete="current-password" required />
+              <div class="input-shell">
+                <i class="fas fa-lock"></i>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  autocomplete="current-password"
+                  required
+                  placeholder="Введите пароль"
+                />
+              </div>
             </div>
-            
+
             <button type="submit" class="btn submit-btn">Войти</button>
-            <br>
-            <button id="logoutBtn" class="btn submit-btn" style="display:none;margin-top: 16px;">
-  Выйти из аккаунта
-</button>
+
+            <button id="logoutBtn" class="btn secondary-btn" type="button" style="display:none;margin-top: 14px;">
+              Выйти из аккаунта
+            </button>
+
             <div class="form-message" id="loginMessage"></div>
           </form>
         </div>
       </section>
 
-      <section class="section contact" id="contact">
+      <section class="section form-section" id="contact">
         <div class="container">
-          <h2 class="section-title" id="formTitle">Свяжитесь с нами</h2>
-          <p class="section-subtitle" id="formSubtitle">
-            Заполните форму ниже, и мы свяжемся с вами в ближайшее время.
-          </p>
+          <div class="section-head">
+            <span class="section-badge">REST API form</span>
+            <h2 class="section-title" id="formTitle">Создать заявку</h2>
+            <p class="section-subtitle" id="formSubtitle">
+              Форма отправляет данные в Go backend через Fetch API и сохраняет заявку в MySQL.
+            </p>
+          </div>
 
-          <form id="contactForm" class="contact-form" novalidate>
+          <form id="contactForm" class="app-form contact-form" novalidate>
             <input type="hidden" id="applicationId" />
 
             <div class="form-row">
               <div class="form-group">
                 <label for="name">ФИО *</label>
-                <input type="text" id="name" name="name" required />
+                <div class="input-shell">
+                  <i class="fas fa-id-card"></i>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="Иванов Иван Иванович"
+                  />
+                </div>
                 <span class="error-message" id="nameError"></span>
               </div>
 
               <div class="form-group">
                 <label for="email">Email *</label>
-                <input type="email" id="email" name="email" required />
+                <div class="input-shell">
+                  <i class="fas fa-envelope"></i>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="ivanov2011@mail.ru"
+                  />
+                </div>
                 <span class="error-message" id="emailError"></span>
               </div>
             </div>
@@ -212,7 +299,16 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="phone">Телефон *</label>
-                <input type="tel" id="phone" name="phone" required />
+                <div class="input-shell">
+                  <i class="fas fa-phone"></i>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    placeholder="+7 (999) 000-77-77"
+                  />
+                </div>
                 <span class="error-message" id="phoneError"></span>
               </div>
 
@@ -225,13 +321,16 @@
 
             <div class="form-group">
               <label>Пол *</label>
-              <div class="checkbox-group">
-                <input type="radio" id="genderMale" name="gender" value="male" required />
-                <label for="genderMale">Мужской</label>
-              </div>
-              <div class="checkbox-group">
-                <input type="radio" id="genderFemale" name="gender" value="female" required />
-                <label for="genderFemale">Женский</label>
+              <div class="choice-row">
+                <label class="choice-card" for="genderMale">
+                  <input type="radio" id="genderMale" name="gender" value="male" required />
+                  <span id="pol">Мужской</span>
+                </label>
+
+                <label class="choice-card" for="genderFemale">
+                  <input type="radio" id="genderFemale" name="gender" value="female" required />
+                  <span id="pol">Женский</span>
+                </label>
               </div>
               <span class="error-message" id="genderError"></span>
             </div>
@@ -252,19 +351,26 @@
                 <option value="11">Scala</option>
                 <option value="12">Go</option>
               </select>
+              <p class="field-hint">Зажмите Ctrl / Cmd, чтобы выбрать несколько языков.</p>
               <span class="error-message" id="languagesError"></span>
             </div>
 
             <div class="form-group">
               <label for="biography">Биография *</label>
-              <textarea id="biography" name="biography" rows="5" required></textarea>
+              <textarea
+                id="biography"
+                name="biography"
+                rows="5"
+                required
+                placeholder="Коротко расскажите о себе..."
+              ></textarea>
               <span class="error-message" id="biographyError"></span>
             </div>
 
-            <div class="form-group checkbox-group">
+            <label class="agreement-card" for="agreement">
               <input type="checkbox" id="agreement" name="agreement" required />
-              <label for="agreement">С контрактом ознакомлен *</label>
-            </div>
+              <span>С контрактом ознакомлен *</span>
+            </label>
             <span class="error-message" id="agreementError"></span>
 
             <button type="submit" class="btn submit-btn" id="submitBtn">
@@ -276,33 +382,100 @@
           </form>
         </div>
       </section>
+
+      <section class="section faq" id="faq">
+        <div class="container narrow-container">
+          <div class="section-head">
+            <span class="section-badge">FAQ</span>
+            <h2 class="section-title">Что показывает проект</h2>
+            <p class="section-subtitle">
+              Коротко о том, какие backend-механики здесь реализованы.
+            </p>
+          </div>
+
+          <div class="faq-container">
+            <div class="faq-item">
+              <button class="faq-question" type="button">
+                <span>Как создается заявка?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Frontend отправляет JSON через fetch, backend валидирует данные,
+                  сохраняет заявку и возвращает результат клиенту.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" type="button">
+                <span>Как работает редактирование?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  После входа backend проверяет session cookie, восстанавливает пользователя
+                  и разрешает обновлять только собственную заявку.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" type="button">
+                <span>Что делает admin panel?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Админ может смотреть заявки, редактировать их, удалять и анализировать
+                  статистику по выбранным языкам программирования.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" type="button">
+                <span>Почему это хороший backend-проект?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  В нем есть не только CRUD, но и authentication flow, middleware,
+                  sessions, MySQL repository, relational loading и frontend integration.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-info">
-            <a href="/" class="footer-logo">WebSite</a>
-            <p>Создаем современные веб-решения с 2025 года</p>
-          </div>
-          <div class="footer-links">
-            <h3>Быстрые ссылки</h3>
-            <ul>
-              <li><a href="#hero">Главная</a></li>
-              <li><a href="#login-section">Вход</a></li>
-              <li><a href="#contact">Форма</a></li>
-            </ul>
-          </div>
-          <div class="footer-contact" id="footer-contacts">
-            <h3>Контакты</h3>
-            <p><i class="fas fa-envelope"></i> romanbelov8913@gmail.com</p>
-            <p><i class="fas fa-phone"></i> +7 (908) 950 33 77</p>
-          </div>
+      <div class="container footer-content">
+        <div>
+          <a href="/" class="footer-logo">Go WebForm</a>
+          <p>Student backend project with frontend integration.</p>
         </div>
-        <div class="footer-bottom">
-          <p>&copy; 2025 Веб-сайт. Все права защищены.</p>
-          <p>Студенческий проект Белова Романа</p>
+
+        <div class="footer-links">
+          <h3>Навигация</h3>
+          <ul>
+            <li><a href="#hero">Главная</a></li>
+            <li><a href="#portfolio">Архитектура</a></li>
+            <li><a href="#login-section">Вход</a></li>
+            <li><a href="#contact">Форма</a></li>
+          </ul>
         </div>
+
+        <div class="footer-contact" id="footer-contacts">
+          <h3>Контакты</h3>
+          <p><i class="fas fa-envelope"></i> romanbelov8913@gmail.com</p>
+          <p><i class="fas fa-phone"></i> +7 (908) 950 33 77</p>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>&copy; 2025 Go Web Form Project. Студенческий проект Белова Романа.</p>
       </div>
     </footer>
 
