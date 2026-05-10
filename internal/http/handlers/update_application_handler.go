@@ -8,7 +8,7 @@ import (
 
 	"webform-go/internal/domain"
 	"webform-go/internal/service"
-	"webform-go/internal/validation.go"
+	"webform-go/internal/validation"
 )
 
 func UpdateApplicationHandler(w http.ResponseWriter, r *http.Request) {

@@ -6,7 +6,7 @@ import (
 	"webform-go/internal/domain"
 	"webform-go/internal/repository"
 	"webform-go/internal/service"
-	"webform-go/internal/validation.go"
+	"webform-go/internal/validation"
 )
 
 var applicationRepo repository.ApplicationRepository
