@@ -13,6 +13,7 @@ const state = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
+  initMobileMenu();
   initLoginForm();
   initApplicationForm();
   initLogout();
@@ -106,6 +107,26 @@ async function checkAuth() {
 
 function $(id) {
   return document.getElementById(id);
+}
+
+function initMobileMenu() {
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  if (!hamburger || !mobileMenu) return;
+
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+  });
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+    });
+  });
 }
 
 async function requestJSON(url, options = {}) {
