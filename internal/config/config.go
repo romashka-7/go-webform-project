@@ -23,11 +23,12 @@ func LoadConfig() Config {
 	return Config{
 		ServerPort: getEnv("PORT", getEnv("SERVER_PORT", "8080")),
 
-		DBHost:        getEnv("MYSQLHOST", getEnv("DB_HOST", "localhost")),
-		DBPort:        getEnv("MYSQLPORT", getEnv("DB_PORT", "3306")),
-		DBUser:        getEnv("MYSQLUSER", getEnv("DB_USER", "root")),
-		DBPassword:    getEnv("MYSQLPASSWORD", getEnv("DB_PASSWORD", "")),
-		DBName:        getEnv("MYSQLDATABASE", getEnv("DB_NAME", "go_webform")),
+		DBHost:     getEnv("MYSQLHOST", "localhost"),
+		DBPort:     getEnv("MYSQLPORT", "3306"),
+		DBUser:     getEnv("MYSQLUSER", "root"),
+		DBPassword: getEnv("MYSQLPASSWORD", ""),
+		DBName:     getEnv("MYSQLDATABASE", "go_webform"),
+
 		AdminLogin:    getEnv("ADMIN_LOGIN", "admin"),
 		AdminPassword: getEnv("ADMIN_PASSWORD", "admin123"),
 	}
