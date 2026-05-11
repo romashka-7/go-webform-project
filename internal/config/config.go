@@ -21,7 +21,7 @@ func LoadConfig() Config {
 	_ = godotenv.Load()
 
 	return Config{
-		ServerPort: getEnv("SERVER_PORT", "8080"),
+		ServerPort: getEnv("PORT", getEnv("SERVER_PORT", "8080")),
 
 		DBUser:        getEnv("DB_USER", getEnv("MYSQLUSER", "root")),
 		DBPassword:    getEnv("DB_PASSWORD", getEnv("MYSQLPASSWORD", "")),
