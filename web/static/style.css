@@ -983,5 +983,18 @@ video {
   }
 }
 
+@media (max-width: 759px) {
+  #bg-video {
+    display: none;
+  }
+
+  .video-background {
+    background-image:
+      linear-gradient(to bottom, rgba(2, 6, 23, 0.82), rgba(2, 6, 23, 0.96)),
+      url("/static/video-poster.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+}
 
 
