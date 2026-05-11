@@ -560,13 +560,30 @@ video {
   z-index: 1;
   margin-bottom: 22px;
 }
-
-.form-group label {
+.form-group > label {
   display: block;
   margin-bottom: 10px;
   color: var(--muted-strong);
   font-size: 0.94rem;
   font-weight: 800;
+}
+
+.choice-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.choice-card input {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.choice-text {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  line-height: 1;
 }
 
 .input-shell {
@@ -942,9 +959,29 @@ video {
   }
 }
 
-#pol {
-  position: absolute;
-  bottom: 61px;
-  margin: 10px;
+.choice-card {
+  position: relative;
 }
+
+.choice-text {
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.choice-card:has(input:checked) {
+  border-color: rgba(96, 165, 250, 0.8);
+  background: rgba(125, 163, 245, 0.18);
+}
+
+@media (max-width: 759px) {
+  .gender-row {
+    grid-template-columns: 1fr;
+  }
+
+  .choice-card {
+    min-height: 58px;
+  }
+}
+
+
 
