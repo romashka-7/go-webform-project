@@ -19,7 +19,6 @@ func NewRouter(applicationService *service.ApplicationService) http.Handler {
 
 	mux.HandleFunc("/", handlers.HomeHandler)
 	mux.HandleFunc("/health", handlers.HealthHandler)
-	mux.HandleFunc("/form", handlers.FormHandler)
 
 	mux.HandleFunc("/api/login", handlers.LoginHandler)
 

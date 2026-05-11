@@ -384,103 +384,7 @@ function fillApplicationForm(app) {
 }
 
 
-  // ========== Слайдер ==========
-  const slider = document.querySelector(".slider");
-  const prevBtn = document.querySelector(".prev-btn");
-  const nextBtn = document.querySelector(".next-btn");
-  const dots = document.querySelectorAll(".dot");
-  const slides = document.querySelectorAll(".slider-item");
-
-  let currentSlide = 0;
-  const totalSlides = slides.length;
-
-  // Функция обновления слайдера
-  function updateSlider() {
-    if (slider) {
-      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-      // Обновление точек
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === currentSlide);
-      });
-
-      // Обновление активного слайда
-      slides.forEach((slide, index) => {
-        slide.classList.toggle("active", index === currentSlide);
-      });
-    }
-  }
-
-  // Следующий слайд
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      updateSlider();
-    });
-  }
-
-  // Предыдущий слайд
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-      updateSlider();
-    });
-  }
-
-  // Навигация по точкам
-  dots.forEach((dot) => {
-    dot.addEventListener("click", function () {
-      currentSlide = parseInt(this.getAttribute("data-slide"));
-      updateSlider();
-    });
-  });
-
-  // Автопрокрутка слайдера
-  let slideInterval = setInterval(() => {
-    if (slider) {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      updateSlider();
-    }
-  }, 5000);
-
-  // Остановка автопрокрутки при наведении
-  if (slider) {
-    slider.addEventListener("mouseenter", () => {
-      clearInterval(slideInterval);
-    });
-
-    slider.addEventListener("mouseleave", () => {
-      slideInterval = setInterval(() => {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        updateSlider();
-      }, 5000);
-    });
-  }
-
-
-  document.addEventListener("DOMContentLoaded", function () {
-  // ========== Мобильное меню ==========
-  const hamburger = document.getElementById("hamburger");
-  const mobileMenu = document.getElementById("mobileMenu");
-  const mobileDropdowns = document.querySelectorAll(".mobile-dropdown");
-
-  if (hamburger) {
-    hamburger.addEventListener("click", function () {
-      mobileMenu.classList.toggle("active");
-      hamburger.classList.toggle("active");
-
-      // Анимация гамбургера в крестик
-      const bars = document.querySelectorAll(".bar");
-      if (mobileMenu.classList.contains("active")) {
-        bars[0].style.transform = "rotate(45deg) translate(5px, 5px)";
-        bars[1].style.opacity = "0";
-        bars[2].style.transform = "rotate(-45deg) translate(7px, -6px)";
-      } else {
-        bars[0].style.transform = "none";
-        bars[1].style.opacity = "1";
-        bars[2].style.transform = "none";
-      }
-    });
+  
     // ========== FAQ аккордеон ==========
     const faqItems = document.querySelectorAll(".faq-item");
 
@@ -501,4 +405,3 @@ function fillApplicationForm(app) {
         });
       }
     });
-  }});

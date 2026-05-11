@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS sessions {
+CREATE TABLE IF NOT EXISTS sessions (
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     session_id VARCHAR(255) NOT NULL UNIQUE,
@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS sessions {
         FOREIGN KEY (user_id)
         REFERENCES users(id)
         ON DELETE CASCADE
-}
+);

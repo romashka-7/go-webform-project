@@ -1,5 +1,7 @@
 package repository
 
+//layer work with database
+
 import (
 	"database/sql"
 

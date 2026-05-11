@@ -10,9 +10,6 @@ import (
 )
 
 func AdminDeleteApplication(w http.ResponseWriter, r *http.Request) {
-	if !CheckAdminAuth(w, r) {
-		return
-	}
 
 	idStr := strings.TrimPrefix(r.URL.Path, "/admin/applications/")
 

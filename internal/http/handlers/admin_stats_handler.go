@@ -9,9 +9,6 @@ import (
 )
 
 func AdminStatsHandler(w http.ResponseWriter, r *http.Request) {
-	if !CheckAdminAuth(w, r) {
-		return
-	}
 
 	if r.Method != http.MethodGet {
 		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)

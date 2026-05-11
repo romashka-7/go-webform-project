@@ -13,24 +13,25 @@ import (
 )
 
 func main() {
-	cfg := config.LoadConfig()
+	cfg := config.LoadConfig() // load confing: port server, db, login/password admin
 
-	db, err := app.NewBD(cfg)
+	db, err := app.NewBD(cfg) //connect to mysql
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer db.Close() // close db connection after main func
 
-	repo := repository.NewMySQLApplicationRepository(db)
-	applicationService := service.NewApplicationService(repo)
+	repo := repository.NewMySQLApplicationRepository(db) // create repo which can work with db
 
-	handlers.SetApplicationRepository(repo)
+	applicationService := service.NewApplicationService(repo) // create service layer which can work with repo
 
-	router := apphttp.NewRouter(applicationService)
+	handlers.SetApplicationRepository(repo) //transfer repo to handlers
 
-	addr := ":" + cfg.ServerPort
+	router := apphttp.NewRouter(applicationService) // create router
 
-	log.Println("Сервер запущен: http://localhost:" + addr)
-	log.Fatal(http.ListenAndServe(addr, router))
+	addr := ":" + cfg.ServerPort // dynamic port server
+
+	log.Println("Сервер запущен: http://localhost:" + addr) // info server start
+	log.Fatal(http.ListenAndServe(addr, router))            // listen requests and serve them (brouser - client)
 }

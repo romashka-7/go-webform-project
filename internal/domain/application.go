@@ -1,5 +1,7 @@
 package domain
 
+//package domain - modules of data that is structures which project trade inside themself and with json
+
 type Application struct {
 	ID        int    `json:"id"`
 	Name      string `json:"name"`

@@ -2,6 +2,8 @@ package repository
 
 import "webform-go/internal/domain"
 
+//interfaces for realisetion of repository methods
+
 type ApplicationRepository interface {
 	Save(application domain.Application) (domain.Application, error)
 

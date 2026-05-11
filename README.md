@@ -103,6 +103,17 @@ web/
     static/
 
 
+Это mini fullstack web application на Go.
+Backend построен на net/http и ServeMux.
+Архитектура разделена на handlers, service и repository.
+Данные сохраняются в MySQL.
+Frontend отправляет JSON через fetch API.
+После создания заявки backend автоматически создает пользователя, генерирует логин и пароль, хеширует(sha-256) пароль и сохраняет его в базе.
+Авторизация реализована через sessions и cookies.
+Для защиты изменения заявок используется middleware, который проверяет владельца заявки.
+Также есть отдельная admin panel с Basic Auth, CRUD-заявками и статистикой.
+
+
 
 # First commit (router and form)
 
@@ -1864,3 +1875,11 @@ backend architecture и JS logic НЕ изменялись
     - API integration
 
 работают как и раньше
+
+
+global to remember
+router — куда отправить запрос
+handler — как принять HTTP-запрос
+service — что по смыслу надо сделать
+repository — как это сохранить/достать из базы
+middleware — можно ли вообще пустить запрос дальше
